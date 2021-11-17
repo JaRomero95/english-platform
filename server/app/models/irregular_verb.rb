@@ -1,0 +1,2 @@
+class IrregularVerb < ApplicationRecord
+end

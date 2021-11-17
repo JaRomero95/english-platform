@@ -1,0 +1,64 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "base": "be",
+      "past-tense":"was/were",
+      "past-participle": "been"
+    },
+    {
+      "id": 2,
+      "base": "begin",
+      "past-tense":"began",
+      "past-participle": "begun"
+    },
+    {
+      "id": 3,
+      "base": "break",
+      "past-tense":"broke",
+      "past-participle": "broken"
+    },
+    {
+      "id": 4,
+      "base": "bring",
+      "past-tense":"brought",
+      "past-participle": "brought"
+    },
+    {
+      "id": 5,
+      "base": "buy",
+      "past-tense":"bought",
+      "past-participle": "bought"
+    },
+    {
+      "id": 6,
+      "base": "build",
+      "past-tense":"built",
+      "past-participle": "built"
+    },
+    {
+      "id": 7,
+      "base": "choose",
+      "past-tense":"chose",
+      "past-participle": "chosen"
+    },
+    {
+      "id": 8,
+      "base": "come",
+      "past-tense":"came",
+      "past-participle": "come"
+    },
+    {
+      "id": 9,
+      "base": "cost",
+      "past-tense":"cost",
+      "past-participle": "cost"
+    },
+    {
+      "id": 10,
+      "base": "cut",
+      "past-tense":"cut",
+      "past-participle": "cut"
+    }
+  ]
+}
