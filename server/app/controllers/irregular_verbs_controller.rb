@@ -3,7 +3,8 @@ class IrregularVerbsController < ApplicationController
 
   # GET /irregular_verbs
   def index
-    @irregular_verbs = IrregularVerb.all
+    @irregular_verbs = IrregularVerb.all.order(Arel.sql('random()'))
+    @irregular_verbs = paginate(@irregular_verbs)
 
     render json: @irregular_verbs
   end

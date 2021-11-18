@@ -4,6 +4,7 @@ import IrregularVerbInput from 'components/irregular_verbs/IrregularVerbInput';
 
 interface Props {
   irregularVerb: IrregularVerb;
+  toCorrect: boolean;
 }
 
 interface State {
@@ -15,7 +16,11 @@ class IrregularVerbForm extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      irregularVerb: {...props.irregularVerb},
+      irregularVerb: {
+        ...props.irregularVerb,
+        past_tense: '',
+        past_participle: '',
+      },
     };
   }
 
@@ -33,6 +38,7 @@ class IrregularVerbForm extends React.Component<Props, State> {
   render() {
     const {
       props: {
+        toCorrect,
         irregularVerb: {
           base,
           past_tense: validPastTense,
@@ -54,12 +60,14 @@ class IrregularVerbForm extends React.Component<Props, State> {
         <IrregularVerbInput
           value={past_tense}
           validValue={validPastTense}
+          toCorrect={toCorrect}
           onChange={(value) => onChangeValue(value, 'past_tense')}
         />
 
         <IrregularVerbInput
           value={past_participle}
           validValue={validPastParticiple}
+          toCorrect={toCorrect}
           onChange={(value) => onChangeValue(value, 'past_participle')}
         />
       </div>

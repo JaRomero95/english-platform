@@ -3,12 +3,30 @@ import React from 'react';
 interface Props {
   value: string;
   validValue: string;
+  toCorrect: boolean;
   onChange: (value: string) => void;
 }
 
-class IrregularVerbInput extends React.Component<Props> {
+interface State {
+  showValidValue: boolean;
+}
+
+class IrregularVerbInput extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      showValidValue: false,
+    };
+  }
   onChange = (event: {target: HTMLInputElement}) => {
-    this.props.onChange(event.target.value);
+    const {toCorrect, onChange} = this.props;
+
+    if (toCorrect) {
+      return;
+    }
+
+    onChange(event.target.value);
   };
 
   isValueValid = () => {
@@ -16,18 +34,39 @@ class IrregularVerbInput extends React.Component<Props> {
     return value === validValue;
   };
 
+  toggleShowValidValue = () => {
+    this.setState({showValidValue: !this.state.showValidValue});
+  };
+
+  showError = () => {
+    const {
+      props: {toCorrect},
+      isValueValid,
+    } = this;
+
+    return toCorrect && !isValueValid();
+  };
+
   render() {
     const {
-      props: {value},
+      props: {value, validValue},
+      state: {showValidValue},
       onChange,
-      isValueValid,
+      toggleShowValidValue,
+      showError,
     } = this;
 
     return (
       <div>
         <input value={value} onChange={onChange} />
 
-        {!isValueValid() && <p>Incorrect</p>}
+        <button type="button" onClick={toggleShowValidValue}>
+          Show
+        </button>
+
+        {showError() && <span>Incorrect</span>}
+
+        {showValidValue && <span>{validValue}</span>}
       </div>
     );
   }

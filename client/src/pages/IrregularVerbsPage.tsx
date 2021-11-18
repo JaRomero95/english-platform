@@ -7,6 +7,7 @@ interface Props {}
 
 interface State {
   irregularVerbs: IrregularVerb[];
+  submitted: boolean;
 }
 
 class IrregularVerbsPage extends React.Component<Props, State> {
@@ -15,25 +16,57 @@ class IrregularVerbsPage extends React.Component<Props, State> {
 
     this.state = {
       irregularVerbs: [],
+      submitted: false,
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getIrregularVerbs();
+  }
+
+  reset = () => {
+    this.setState({submitted: false});
+    this.getIrregularVerbs();
+  };
+
+  async getIrregularVerbs() {
     const repository = new IrregularVerbsRepository();
     const irregularVerbs = await repository.index();
     this.setState({irregularVerbs});
   }
 
+  onSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+
+    this.setState({submitted: true});
+  };
+
   render() {
-    const {irregularVerbs} = this.state;
+    const {
+      state: {irregularVerbs, submitted},
+      onSubmit,
+      reset,
+    } = this;
 
     return (
       <div>
         <h1>Irregular Verbs</h1>
 
-        {irregularVerbs.map((verb: IrregularVerb) => (
-          <IrregularVerbForm key={verb.id} irregularVerb={verb} />
-        ))}
+        <form onSubmit={onSubmit}>
+          {irregularVerbs.map((verb: IrregularVerb) => (
+            <IrregularVerbForm
+              key={verb.id}
+              irregularVerb={verb}
+              toCorrect={submitted}
+            />
+          ))}
+
+          <button type="submit" onSubmit={onSubmit} disabled={submitted}>
+            Send
+          </button>
+        </form>
+
+        <button onClick={reset}>Reset</button>
       </div>
     );
   }
