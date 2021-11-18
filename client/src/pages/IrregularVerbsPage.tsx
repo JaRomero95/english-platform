@@ -1,7 +1,7 @@
 import React from 'react';
 import IrregularVerb from 'models/IrregularVerb';
 import IrregularVerbsRepository from 'repositories/IrregularVerbsRepository';
-import IrregularVerbForm from 'components/IrregularVerbForm';
+import IrregularVerbForm from 'components/irregular_verbs/IrregularVerbForm';
 
 interface Props {}
 
