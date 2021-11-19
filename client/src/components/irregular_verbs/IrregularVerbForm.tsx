@@ -2,9 +2,17 @@ import React from 'react';
 import IrregularVerb from 'models/IrregularVerb';
 import IrregularVerbInput from 'components/irregular_verbs/IrregularVerbInput';
 
+const PAST_TENSE = 'past_tense';
+const PAST_PARTICIPLE = 'past_participle';
+
+const VERB_TENSES = [PAST_TENSE, PAST_PARTICIPLE] as const;
+
+type VerbTense = typeof VERB_TENSES[number];
+
 interface Props {
   irregularVerb: IrregularVerb;
   toCorrect: boolean;
+  onCorrection: (result: boolean) => void;
 }
 
 interface State {
@@ -24,8 +32,23 @@ class IrregularVerbForm extends React.Component<Props, State> {
     };
   }
 
+  componentDidUpdate(prevProps: Props) {
+    const {toCorrect: prevToCorrect} = prevProps;
+    const {toCorrect, onCorrection} = this.props;
+    const {isCorrect} = this;
+
+    if (!prevToCorrect && toCorrect) {
+      onCorrection(isCorrect());
+    }
+  }
+
   onChangeValue = (newValue: string, fieldName: string): void => {
+    const {toCorrect} = this.props;
     const {irregularVerb} = this.state;
+
+    if (toCorrect) {
+      return;
+    }
 
     this.setState({
       irregularVerb: {
@@ -35,10 +58,35 @@ class IrregularVerbForm extends React.Component<Props, State> {
     });
   };
 
+  isValueValid = (currentValue: string, validValue: string) => {
+    return currentValue === validValue;
+  };
+
+  isCorrect = () => {
+    return (
+      this.verbTenseIsValid(PAST_TENSE) &&
+      this.verbTenseIsValid(PAST_PARTICIPLE)
+    );
+  };
+
+  showError = (verbTense: VerbTense): boolean => {
+    if (!this.props.toCorrect) {
+      return false;
+    }
+
+    return !this.verbTenseIsValid(verbTense);
+  };
+
+  verbTenseIsValid(verbTense: VerbTense): boolean {
+    const value = this.props.irregularVerb[verbTense];
+    const validValue = this.state.irregularVerb[verbTense];
+
+    return value === validValue;
+  }
+
   render() {
     const {
       props: {
-        toCorrect,
         irregularVerb: {
           base,
           past_tense: validPastTense,
@@ -48,6 +96,7 @@ class IrregularVerbForm extends React.Component<Props, State> {
       state: {
         irregularVerb: {past_tense, past_participle},
       },
+      showError,
       onChangeValue,
     } = this;
 
@@ -60,15 +109,15 @@ class IrregularVerbForm extends React.Component<Props, State> {
         <IrregularVerbInput
           value={past_tense}
           validValue={validPastTense}
-          toCorrect={toCorrect}
-          onChange={(value) => onChangeValue(value, 'past_tense')}
+          onChange={(value) => onChangeValue(value, PAST_TENSE)}
+          showError={showError(PAST_TENSE)}
         />
 
         <IrregularVerbInput
           value={past_participle}
           validValue={validPastParticiple}
-          toCorrect={toCorrect}
-          onChange={(value) => onChangeValue(value, 'past_participle')}
+          onChange={(value) => onChangeValue(value, PAST_PARTICIPLE)}
+          showError={showError(PAST_PARTICIPLE)}
         />
       </div>
     );

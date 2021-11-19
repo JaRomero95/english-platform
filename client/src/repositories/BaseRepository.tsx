@@ -8,6 +8,12 @@ abstract class BaseRepository<T> {
 
     return data;
   }
+
+  public async create(payload: T): Promise<T> {
+    const {data} = await httpClient.post(this.baseUrl, {data: payload});
+
+    return data;
+  }
 }
 
 export default BaseRepository;

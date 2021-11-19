@@ -3,7 +3,7 @@ import React from 'react';
 interface Props {
   value: string;
   validValue: string;
-  toCorrect: boolean;
+  showError: boolean;
   onChange: (value: string) => void;
 }
 
@@ -20,40 +20,19 @@ class IrregularVerbInput extends React.Component<Props, State> {
     };
   }
   onChange = (event: {target: HTMLInputElement}) => {
-    const {toCorrect, onChange} = this.props;
-
-    if (toCorrect) {
-      return;
-    }
-
-    onChange(event.target.value);
-  };
-
-  isValueValid = () => {
-    const {value, validValue} = this.props;
-    return value === validValue;
+    this.props.onChange(event.target.value);
   };
 
   toggleShowValidValue = () => {
     this.setState({showValidValue: !this.state.showValidValue});
   };
 
-  showError = () => {
-    const {
-      props: {toCorrect},
-      isValueValid,
-    } = this;
-
-    return toCorrect && !isValueValid();
-  };
-
   render() {
     const {
-      props: {value, validValue},
+      props: {value, validValue, showError},
       state: {showValidValue},
       onChange,
       toggleShowValidValue,
-      showError,
     } = this;
 
     return (
@@ -64,7 +43,7 @@ class IrregularVerbInput extends React.Component<Props, State> {
           Show
         </button>
 
-        {showError() && <span>Incorrect</span>}
+        {showError && <span>Incorrect</span>}
 
         {showValidValue && <span>{validValue}</span>}
       </div>

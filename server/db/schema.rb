@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_191655) do
+ActiveRecord::Schema.define(version: 2021_11_19_201017) do
+
+  create_table "irregular_verb_users", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "irregular_verb_id", null: false
+    t.integer "answers", default: 0
+    t.integer "correct_answers", default: 0
+    t.integer "wrong_answers", default: 0
+    t.datetime "last_answer_datetime"
+    t.string "last_answer_result"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["irregular_verb_id"], name: "index_irregular_verb_users_on_irregular_verb_id"
+    t.index ["user_id"], name: "index_irregular_verb_users_on_user_id"
+  end
 
   create_table "irregular_verbs", force: :cascade do |t|
     t.string "base"
@@ -20,4 +34,12 @@ ActiveRecord::Schema.define(version: 2021_11_17_191655) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "irregular_verb_users", "irregular_verbs"
+  add_foreign_key "irregular_verb_users", "users"
 end

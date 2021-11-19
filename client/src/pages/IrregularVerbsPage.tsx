@@ -1,12 +1,15 @@
 import React from 'react';
 import IrregularVerb from 'models/IrregularVerb';
+import IrregularVerbResult from 'models/IrregularVerbResult';
 import IrregularVerbsRepository from 'repositories/IrregularVerbsRepository';
+import IrregularVerbsExamsRepository from 'repositories/IrregularVerbsExamsRepository';
 import IrregularVerbForm from 'components/irregular_verbs/IrregularVerbForm';
 
 interface Props {}
 
 interface State {
   irregularVerbs: IrregularVerb[];
+  irregularVerbsResults: IrregularVerbResult[];
   submitted: boolean;
 }
 
@@ -16,12 +19,30 @@ class IrregularVerbsPage extends React.Component<Props, State> {
 
     this.state = {
       irregularVerbs: [],
+      irregularVerbsResults: [],
       submitted: false,
     };
   }
 
   componentDidMount() {
     this.getIrregularVerbs();
+  }
+
+  componentDidUpdate() {
+    const {irregularVerbsResults} = this.state;
+
+    if (this.isExamComplete()) {
+      const repository = new IrregularVerbsExamsRepository();
+      repository.create(irregularVerbsResults);
+    }
+  }
+
+  isExamComplete(): boolean {
+    const {irregularVerbs, irregularVerbsResults} = this.state;
+
+    const totalVerbs = irregularVerbs.length;
+
+    return !!totalVerbs && totalVerbs === irregularVerbsResults.length;
   }
 
   reset = () => {
@@ -32,7 +53,10 @@ class IrregularVerbsPage extends React.Component<Props, State> {
   async getIrregularVerbs() {
     const repository = new IrregularVerbsRepository();
     const irregularVerbs = await repository.index();
-    this.setState({irregularVerbs});
+    this.setState({
+      irregularVerbs,
+      irregularVerbsResults: [],
+    });
   }
 
   onSubmit = (event: React.SyntheticEvent) => {
@@ -41,11 +65,26 @@ class IrregularVerbsPage extends React.Component<Props, State> {
     this.setState({submitted: true});
   };
 
+  onCorrection = (verbId: number, result: boolean): void => {
+    const irregularVerbResult: IrregularVerbResult = {
+      id: verbId,
+      result,
+    };
+
+    this.setState((state: State) => ({
+      irregularVerbsResults: [
+        ...state.irregularVerbsResults,
+        irregularVerbResult,
+      ],
+    }));
+  };
+
   render() {
     const {
       state: {irregularVerbs, submitted},
       onSubmit,
       reset,
+      onCorrection,
     } = this;
 
     return (
@@ -58,6 +97,7 @@ class IrregularVerbsPage extends React.Component<Props, State> {
               key={verb.id}
               irregularVerb={verb}
               toCorrect={submitted}
+              onCorrection={(result: boolean) => onCorrection(verb.id, result)}
             />
           ))}
 

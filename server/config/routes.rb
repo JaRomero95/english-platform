@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  resources :irregular_verbs
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :irregular_verbs, only: %w[index]
+  resources :irregular_verbs_exams, only: %w[create]
 end

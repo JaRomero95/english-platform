@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  include Authenticable
+
   def paginate(criteria)
     page = params.fetch(:page, 1)
     limit = params.fetch(:per_page, 10)
