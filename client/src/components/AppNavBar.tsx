@@ -5,12 +5,17 @@ class AppNavBar extends React.Component {
   render() {
     return (
       <nav>
-        <div>
-          <Link to="/">Home</Link>
-        </div>
-        <div>
-          <Link to="/irregular-verbs">Irregular Verbs</Link>
-        </div>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/irregular-verbs">Irregular Verbs</Link>
+          </li>
+          <li>
+            <Link to="/flash-cards">Flash Cards</Link>
+          </li>
+        </ul>
       </nav>
     );
   }

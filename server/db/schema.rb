@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_201017) do
+ActiveRecord::Schema.define(version: 2021_11_22_193346) do
+
+  create_table "flash_cards", force: :cascade do |t|
+    t.text "question_text"
+    t.string "question_img_url"
+    t.text "answer_text"
+    t.string "answer_img_url"
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_flash_cards_on_user_id"
+  end
 
   create_table "irregular_verb_users", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -40,6 +51,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_201017) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "flash_cards", "users"
   add_foreign_key "irregular_verb_users", "irregular_verbs"
   add_foreign_key "irregular_verb_users", "users"
 end

@@ -3,10 +3,10 @@ import httpClient from './HttpClient';
 abstract class BaseRepository<T> {
   abstract readonly baseUrl: string;
 
-  public async index(): Promise<T[]> {
-    const {data} = await httpClient.get(this.baseUrl);
+  public async index(params: {} = {}): Promise<T[]> {
+    const {data} = await httpClient.get(this.baseUrl, {params});
 
-    return data;
+    return data.data;
   }
 
   public async create(payload: T): Promise<T> {
