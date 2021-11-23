@@ -8,6 +8,7 @@ type FlashCardFace = {
 
 interface Props {
   flashCard: FlashCard;
+  onFlip: () => void;
 }
 
 interface State {
@@ -31,6 +32,8 @@ class FlashCardShow extends React.Component<Props, State> {
   }
 
   flipCard = () => {
+    this.props.onFlip();
+
     this.setState((state) => ({
       cardFront: !state.cardFront,
     }));
@@ -56,7 +59,11 @@ class FlashCardShow extends React.Component<Props, State> {
             textAlign: 'center',
           }}
         >
-          <span>{text}</span>
+          <span
+            style={{color: 'white', fontSize: '50px', backgroundColor: 'black'}}
+          >
+            {text}
+          </span>
         </div>
       </div>
     );

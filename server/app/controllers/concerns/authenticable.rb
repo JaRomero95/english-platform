@@ -1,6 +1,6 @@
 module Authenticable
   def authenticate!
-    @user = User.first
+    @user = User.order(created_at: :asc).first
   end
 
   def current_user

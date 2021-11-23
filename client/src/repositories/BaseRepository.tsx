@@ -9,6 +9,14 @@ abstract class BaseRepository<T> {
     return data.data;
   }
 
+  public async update(id: number, payload?: T): Promise<T> {
+    const url = `${this.baseUrl}/${id}`;
+
+    const {data} = await httpClient.put(url, {data: payload});
+
+    return data;
+  }
+
   public async create(payload: T): Promise<T> {
     const {data} = await httpClient.post(this.baseUrl, {data: payload});
 
