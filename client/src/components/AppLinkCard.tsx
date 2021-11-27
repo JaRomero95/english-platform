@@ -16,9 +16,9 @@ class HomePage extends React.Component<Props> {
     return (
       <LinkWrapper to={path}>
         <StyledPaper>
-          <PaperTitle>{title}</PaperTitle>
-
           <IconWrapper>{icon}</IconWrapper>
+
+          <PaperTitle>{title}</PaperTitle>
         </StyledPaper>
       </LinkWrapper>
     );
@@ -26,26 +26,30 @@ class HomePage extends React.Component<Props> {
 }
 
 const IconWrapper = styled.div`
-  > {
-    font-size: 50px;
-    width: 60px;
+  margin-right: 0.6rem;
+  svg {
+    font-size: 2.8em;
   }
 `;
 
-const LinkWrapper = styled(Link)``;
+const LinkWrapper = styled(Link)`
+  display: inline-block;
+  width: 100%;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+`;
 
 const StyledPaper = styled(Paper)`
-  width: 17em;
-  height: 17em;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  padding: 1rem 0;
 `;
 
 const PaperTitle = styled.span`
   display: block;
-  font-size: 2em;
+  font-size: 1.8em;
 `;
 
 export default HomePage;

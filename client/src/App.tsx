@@ -1,8 +1,8 @@
 import React from 'react';
-import AppBar from 'components/AppBar';
-import AppRoutes from 'router/AppRoutes';
 import CssBaseline from '@mui/material/CssBaseline';
-import './App.css';
+import AppRoutes from 'router/AppRoutes';
+import AppBar from 'components/AppBar';
+import AppContentLayout from 'components/AppContentLayout';
 
 class App extends React.Component {
   render() {
@@ -12,7 +12,9 @@ class App extends React.Component {
 
         <AppBar />
 
-        <AppRoutes />
+        <AppContentLayout>
+          <AppRoutes />
+        </AppContentLayout>
       </div>
     );
   }

@@ -2,6 +2,7 @@ import FlashCard from 'models/FlashCard';
 import React from 'react';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
+import AppPageTitle from 'components/AppPageTitle';
 
 interface Props {}
 
@@ -84,7 +85,7 @@ class FlashCardsPage extends React.Component<Props, State> {
 
     return (
       <div>
-        <h1>Flash Cards</h1>
+        <AppPageTitle>Flash Cards</AppPageTitle>
 
         {flashCard && (
           <FlashCardShow
