@@ -1,8 +1,11 @@
 import FlashCard from 'models/FlashCard';
 import React from 'react';
+import styled from 'styled-components';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
 import AppPageTitle from 'components/AppPageTitle';
+import AppButton from 'components/AppButton';
 
 interface Props {}
 
@@ -23,25 +26,43 @@ class FlashCardsPage extends React.Component<Props, State> {
 
   componentDidMount() {
     this.getFlashCards();
+    this.addKeyListeners();
   }
 
-  componentDidUpdate() {
-    const {currentFlashCardIndex} = this.state;
+  componentWillUnmount() {
+    this.removeKeyListeners();
+  }
 
-    if (!currentFlashCardIndex || this.getCurrentFlashCard()) {
-      return;
+  addKeyListeners() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  removeKeyListeners() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowRight') {
+      this.nextCard();
     }
+  };
 
-    this.getFlashCards();
+  componentDidUpdate() {
+    const {currentFlashCardIndex, flashCards} = this.state;
+
+    const limitToRequestMore = flashCards.length - 2;
+
+    if (currentFlashCardIndex >= limitToRequestMore) {
+      this.getFlashCards();
+    }
   }
 
   async getFlashCards() {
     const flashCards = await this.repository.index({per_page: 10});
 
-    this.setState({
-      flashCards,
-      currentFlashCardIndex: 0,
-    });
+    this.setState((state) => ({
+      flashCards: [...state.flashCards, ...flashCards],
+    }));
   }
 
   getCurrentFlashCard(): FlashCard | null {
@@ -74,12 +95,6 @@ class FlashCardsPage extends React.Component<Props, State> {
     this.countCardAsViewed();
   };
 
-  hasMoreCards() {
-    const {currentFlashCardIndex, flashCards} = this.state;
-    const limit = flashCards.length - 1;
-    return currentFlashCardIndex < limit;
-  }
-
   render() {
     const flashCard = this.getCurrentFlashCard();
 
@@ -95,12 +110,23 @@ class FlashCardsPage extends React.Component<Props, State> {
           />
         )}
 
-        <button onClick={this.nextCard} disabled={!flashCard}>
-          Next card
-        </button>
+        <ButtonContainer>
+          <AppButton
+            onClick={this.nextCard}
+            disabled={!flashCard}
+            endIcon={<ArrowForwardIcon />}
+            size="large"
+          >
+            Next card
+          </AppButton>
+        </ButtonContainer>
       </div>
     );
   }
 }
+
+const ButtonContainer = styled.div`
+  margin-top: 1rem;
+`;
 
 export default FlashCardsPage;

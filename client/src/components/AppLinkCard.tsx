@@ -2,14 +2,9 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
+import LinkOptions from 'models/LinkOptions';
 
-interface Props {
-  path: string;
-  title: string;
-  icon: JSX.Element;
-}
-
-class HomePage extends React.Component<Props> {
+class HomePage extends React.Component<LinkOptions> {
   render() {
     const {path, title, icon} = this.props;
 

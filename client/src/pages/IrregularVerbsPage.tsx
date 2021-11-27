@@ -3,6 +3,7 @@ import IrregularVerb from 'models/IrregularVerb';
 import IrregularVerbResult from 'models/IrregularVerbResult';
 import IrregularVerbsRepository from 'repositories/IrregularVerbsRepository';
 import IrregularVerbsExamsRepository from 'repositories/IrregularVerbsExamsRepository';
+import AppPageTitle from 'components/AppPageTitle';
 import IrregularVerbForm from 'components/irregular_verbs/IrregularVerbForm';
 
 interface Props {}
@@ -89,7 +90,7 @@ class IrregularVerbsPage extends React.Component<Props, State> {
 
     return (
       <div>
-        <h1>Irregular Verbs</h1>
+        <AppPageTitle>Irregular Verbs</AppPageTitle>
 
         <form onSubmit={onSubmit}>
           {irregularVerbs.map((verb: IrregularVerb) => (
