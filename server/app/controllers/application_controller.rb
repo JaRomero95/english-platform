@@ -7,20 +7,27 @@ class ApplicationController < ActionController::API
 
   def pagination_info(elements)
     {
-      page: params.fetch(:page, 1).to_i,
-      per_page: params.fetch(:per_page, 10).to_i,
+      page: page,
+      per_page: per_page.zero? ? elements.length : per_page,
       total_elements: elements.size
     }
   end
 
   def paginate(criteria)
-    page = params.fetch(:page, 1).to_i
-    limit = params.fetch(:per_page, 10).to_i
+    return criteria if per_page.zero?
 
     page = 1 if page < 1
 
-    offset = (page - 1) * limit
+    offset = (page - 1) * per_page
 
-    criteria.limit(limit).offset(offset)
+    criteria.limit(per_page).offset(offset)
+  end
+
+  def per_page
+    @per_page ||= params.fetch(:per_page, 10).to_i
+  end
+
+  def page
+    @page ||= params.fetch(:page, 1).to_i
   end
 end

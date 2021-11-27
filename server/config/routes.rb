@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :flash_card_categories
   resources :tests
   resources :flash_cards, only: %w[index update]
   resources :irregular_verbs, only: %w[index]

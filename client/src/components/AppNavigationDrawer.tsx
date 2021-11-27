@@ -7,11 +7,19 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import StyleIcon from '@mui/icons-material/Style';
 import LinkOptions from 'models/LinkOptions';
 import mainRoutes from 'config/mainRoutes';
 
 const upperLinks: LinkOptions[] = mainRoutes;
-const bottomLinks: LinkOptions[] = [];
+
+const bottomLinks: LinkOptions[] = [
+  {
+    path: '/flash-card-categories',
+    title: 'Flash Card Categories',
+    icon: <StyleIcon />,
+  },
+];
 
 interface Props {
   open: boolean;

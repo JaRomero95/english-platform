@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_23_170816) do
+ActiveRecord::Schema.define(version: 2021_11_27_132429) do
+
+  create_table "flash_card_categories", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_flash_card_categories_on_user_id"
+  end
 
   create_table "flash_cards", force: :cascade do |t|
     t.text "question_text"
@@ -21,6 +29,8 @@ ActiveRecord::Schema.define(version: 2021_11_23_170816) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "times", default: 0
+    t.integer "flash_card_category_id"
+    t.index ["flash_card_category_id"], name: "index_flash_cards_on_flash_card_category_id"
     t.index ["user_id"], name: "index_flash_cards_on_user_id"
   end
 
@@ -52,6 +62,8 @@ ActiveRecord::Schema.define(version: 2021_11_23_170816) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "flash_card_categories", "users"
+  add_foreign_key "flash_cards", "flash_card_categories"
   add_foreign_key "flash_cards", "users"
   add_foreign_key "irregular_verb_users", "irregular_verbs"
   add_foreign_key "irregular_verb_users", "users"

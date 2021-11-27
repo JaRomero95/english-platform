@@ -7,7 +7,7 @@ class HomePage extends React.Component {
     return (
       <div>
         {mainRoutes.map((link) => (
-          <AppLinkCard {...link} />
+          <AppLinkCard key={link.path} {...link} />
         ))}
       </div>
     );
