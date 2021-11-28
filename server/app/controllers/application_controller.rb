@@ -5,6 +5,10 @@ class ApplicationController < ActionController::API
     { data: elements, meta: pagination_info(elements) }
   end
 
+  def show_response(element)
+    { data: element }
+  end
+
   def pagination_info(elements)
     {
       page: page,

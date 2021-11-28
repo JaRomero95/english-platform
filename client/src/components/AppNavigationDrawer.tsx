@@ -15,8 +15,8 @@ const upperLinks: LinkOptions[] = mainRoutes;
 
 const bottomLinks: LinkOptions[] = [
   {
-    path: '/flash-card-categories',
-    title: 'Flash Card Categories',
+    path: '/administration/flash-cards',
+    title: 'Manage Flash Cards',
     icon: <StyleIcon />,
   },
 ];

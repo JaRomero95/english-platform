@@ -10,17 +10,25 @@ abstract class BaseRepository<T> {
   }
 
   public async update(id: number, payload?: T): Promise<T> {
-    const url = `${this.baseUrl}/${id}`;
+    const {data} = await httpClient.put(this.resourceUrl(id), {data: payload});
 
-    const {data} = await httpClient.put(url, {data: payload});
-
-    return data;
+    return data.data;
   }
 
   public async create(payload: T): Promise<T> {
     const {data} = await httpClient.post(this.baseUrl, {data: payload});
 
-    return data;
+    return data.data;
+  }
+
+  public async delete(id: number): Promise<null> {
+    await httpClient.delete(this.resourceUrl(id));
+
+    return null;
+  }
+
+  private resourceUrl(id: number) {
+    return `${this.baseUrl}/${id}`;
   }
 }
 
