@@ -16,9 +16,9 @@ class ApplicationController < ActionController::API
   def paginate(criteria)
     return criteria if per_page.zero?
 
-    page = 1 if page < 1
+    selected_page = page.positive? ? page : 1
 
-    offset = (page - 1) * per_page
+    offset = (selected_page - 1) * per_page
 
     criteria.limit(per_page).offset(offset)
   end
