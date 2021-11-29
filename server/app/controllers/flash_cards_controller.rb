@@ -2,7 +2,7 @@ class FlashCardsController < ApplicationController
   before_action :authenticate!
 
   def index
-    criteria = FlashCard.all.where(user: current_user).order(times: :asc)
+    criteria = FlashCard.filter.where(user: current_user).order(times: :asc)
     flash_cards = paginate(criteria)
 
     render json: index_response(flash_cards)
@@ -19,5 +19,11 @@ class FlashCardsController < ApplicationController
     flash_card.save!
 
     render json: flash_card
+  end
+
+  private
+
+  def filter_params
+    params.fetch(:filter, {}).permit(:flash_card_category_ids)
   end
 end
