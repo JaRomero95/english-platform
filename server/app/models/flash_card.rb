@@ -5,8 +5,15 @@ class FlashCard < ApplicationRecord
 
   class << self
     def filter_by_flash_card_category_ids(flash_card_category_ids)
-      puts flash_card_category_ids
       where(flash_card_category_id: flash_card_category_ids)
+    end
+
+    def filter_by_question_text(question_text)
+      where(question_text: question_text)
+    end
+
+    def filter_by_answer_text(answer_text)
+      where(answer_text: answer_text)
     end
   end
 end

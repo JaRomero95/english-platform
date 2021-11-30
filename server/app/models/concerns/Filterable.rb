@@ -13,8 +13,6 @@ module Filterable
       filters.each do |key, value|
         filter_method = "filter_by_#{key}"
 
-        next unless respond_to?(filter_method)
-
         scope = scope.public_send(filter_method, value)
       end
 

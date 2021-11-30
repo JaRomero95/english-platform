@@ -25,6 +25,6 @@ class FlashCardsController < ApplicationController
   private
 
   def filter_params
-    params.permit(flash_card_category_ids: [])
+    params.permit(:question_text, :answer_text, flash_card_category_ids: [])
   end
 end

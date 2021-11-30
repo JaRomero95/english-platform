@@ -1,18 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Typography, ToggleButtonGroup, ToggleButton} from '@mui/material';
-import AppPaper from 'components/AppPaper';
 import FlashCard from 'models/FlashCard';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
 import FlashCardCategory from 'models/FlashCardCategory';
+import FlashCardAdminItem from 'components/flash_cards/FlashCardAdminItem';
+import FlashCardFilters from 'components/flash_cards/FlashCardFilters';
+import {Filters} from 'components/flash_cards/FlashCardFilters';
 
 interface Props {}
 
-interface State {
+interface State extends Filters {
   flashCards: FlashCard[];
   flashCardCategories: FlashCardCategory[];
-  categoryIds: number[];
 }
 
 class FlashCardCategories extends React.Component<Props, State> {
@@ -22,7 +22,13 @@ class FlashCardCategories extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = {flashCards: [], flashCardCategories: [], categoryIds: []};
+    this.state = {
+      flashCards: [],
+      flashCardCategories: [],
+      categoryIds: [],
+      questionText: '',
+      answerText: '',
+    };
   }
 
   componentDidMount() {
@@ -36,8 +42,21 @@ class FlashCardCategories extends React.Component<Props, State> {
     }
   }
 
+  onFiltersChange = (filters: Filters) => {
+    this.setState(filters);
+  };
+
   shouldGetFlashCards(prevState: State): boolean {
-    return prevState.categoryIds !== this.state.categoryIds;
+    const fieldsToCheck = [
+      'categoryIds',
+      'questionText',
+      'answerText',
+    ] as const;
+
+    return fieldsToCheck.some(
+      (fieldName: typeof fieldsToCheck[number]) =>
+        prevState[fieldName] !== this.state[fieldName]
+    );
   }
 
   async getFlashCardCategories() {
@@ -55,13 +74,15 @@ class FlashCardCategories extends React.Component<Props, State> {
   }
 
   flashCardParams() {
-    const {categoryIds} = this.state;
+    const {categoryIds, questionText, answerText} = this.state;
 
-    if (categoryIds.length) {
-      return {flash_card_category_ids: categoryIds};
-    }
+    const params: {[name: string]: string | Array<number>} = {};
 
-    return {};
+    if (categoryIds.length) params.flash_card_category_ids = categoryIds;
+    if (questionText) params.question_text = questionText;
+    if (answerText) params.answer_text = answerText;
+
+    return params;
   }
 
   onCategorySelected = (event: React.SyntheticEvent, categoryIds: number[]) => {
@@ -69,62 +90,38 @@ class FlashCardCategories extends React.Component<Props, State> {
   };
 
   render() {
-    const {flashCards, flashCardCategories, categoryIds} = this.state;
+    const {
+      flashCards,
+      flashCardCategories,
+      categoryIds,
+      questionText,
+      answerText,
+    } = this.state;
 
     return (
       <div>
-        <AppPaper>
-          <FilterLabel>Categories</FilterLabel>
+        <FlashCardFilters
+          flashCardCategories={flashCardCategories}
+          filters={{categoryIds, questionText, answerText}}
+          onFiltersChange={this.onFiltersChange}
+        />
 
-          <CategoriesFilterGroup
-            color="primary"
-            value={categoryIds}
-            onChange={this.onCategorySelected}
-          >
-            {flashCardCategories.map((flashCardCategory) => (
-              <ToggleButton
-                key={flashCardCategory.id}
-                value={flashCardCategory.id}
-              >
-                {flashCardCategory.name}
-              </ToggleButton>
-            ))}
-          </CategoriesFilterGroup>
-        </AppPaper>
-
-        {flashCards.map((flashCard) => (
-          <div key={flashCard.id}>
-            {flashCard.id} - {flashCard.question_text}
-          </div>
-        ))}
+        <FlashCardsContainer>
+          {flashCards.map((flashCard) => (
+            <FlashCardAdminItem key={flashCard.id} flashCard={flashCard} />
+          ))}
+        </FlashCardsContainer>
       </div>
     );
   }
 }
 
-const CategoriesFilterGroup = styled(ToggleButtonGroup)`
+const FlashCardsContainer = styled.div`
+  margin-top: 1.5rem;
+  display: flex;
   flex-wrap: wrap;
-
-  > button {
-    flex-grow: 1;
-    border-radius: 0;
-    border: 1px solid rgba(0, 0, 0, 0.12) !important;
-    margin-left: -1px;
-    margin-top: -1px;
-  }
-
-  &:after {
-    content: '';
-    flex-grow: 999; // Avoid last row grow
-  }
-`;
-
-const FilterLabel = styled.label`
-  display: block;
-  font-size: 0.9em;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
+  justify-content: space-around;
+  gap: 10px;
 `;
 
 export default FlashCardCategories;
