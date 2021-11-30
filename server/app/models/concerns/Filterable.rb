@@ -7,10 +7,10 @@ module Filterable
   end
 
   class_methods do
-    def filter(_filters)
+    def filter(filters)
       scope = where(nil)
 
-      filtering_params.each do |key, value|
+      filters.each do |key, value|
         filter_method = "filter_by_#{key}"
 
         next unless respond_to?(filter_method)

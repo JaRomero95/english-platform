@@ -58,7 +58,7 @@ class FlashCardCategories extends React.Component<Props, State> {
     const {categoryIds} = this.state;
 
     if (categoryIds.length) {
-      return {category_ids: categoryIds};
+      return {flash_card_category_ids: categoryIds};
     }
 
     return {};

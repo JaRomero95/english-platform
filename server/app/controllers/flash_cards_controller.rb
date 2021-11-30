@@ -2,7 +2,10 @@ class FlashCardsController < ApplicationController
   before_action :authenticate!
 
   def index
-    criteria = FlashCard.filter.where(user: current_user).order(times: :asc)
+    criteria = FlashCard.filter(filter_params)
+                        .where(user: current_user)
+                        .order(last_answer_datetime: :asc, created_at: :asc)
+
     flash_cards = paginate(criteria)
 
     render json: index_response(flash_cards)
@@ -14,9 +17,7 @@ class FlashCardsController < ApplicationController
       user: current_user
     )
 
-    flash_card.times += 1 # FIXME: concurrency
-
-    flash_card.save!
+    flash_card.update! last_answer_datetime: Time.zone.now
 
     render json: flash_card
   end
@@ -24,6 +25,6 @@ class FlashCardsController < ApplicationController
   private
 
   def filter_params
-    params.fetch(:filter, {}).permit(:flash_card_category_ids)
+    params.permit(flash_card_category_ids: [])
   end
 end

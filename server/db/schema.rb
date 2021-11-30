@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_27_132429) do
+ActiveRecord::Schema.define(version: 2021_11_30_155743) do
 
   create_table "flash_card_categories", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(version: 2021_11_27_132429) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "times", default: 0
     t.integer "flash_card_category_id"
+    t.datetime "last_answer_datetime"
     t.index ["flash_card_category_id"], name: "index_flash_cards_on_flash_card_category_id"
     t.index ["user_id"], name: "index_flash_cards_on_user_id"
   end
