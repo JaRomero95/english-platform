@@ -45,8 +45,8 @@ class FlashCardCategories extends React.Component<Props, State> {
   }
 
   async getFlashCardCategories() {
-    const flashCardCategories = await this.repository.index({per_page: 0});
-    this.setState({flashCardCategories});
+    const {data} = await this.repository.index({per_page: 0});
+    this.setState({flashCardCategories: data});
   }
 
   onCreateCategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

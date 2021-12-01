@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router-dom';
 import styled from 'styled-components';
 import FlashCard from 'models/FlashCard';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
@@ -6,114 +7,120 @@ import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepos
 import FlashCardCategory from 'models/FlashCardCategory';
 import FlashCardAdminItem from 'components/flash_cards/FlashCardAdminItem';
 import FlashCardFilters from 'components/flash_cards/FlashCardFilters';
+import AppPagination from 'components/AppPagination';
 import {Filters} from 'components/flash_cards/FlashCardFilters';
 
-interface Props {}
+const flashCardsRepository = new FlashCardsRepository();
+const flashCardCategoriesRepository = new FlashCardCategoriesRepository();
 
-interface State extends Filters {
-  flashCards: FlashCard[];
-  flashCardCategories: FlashCardCategory[];
-}
+const buildFilters = (searchParams: URLSearchParams): Filters => {
+  const categoryIdsParam = searchParams.get('categoryIds');
+  const categoryIds = categoryIdsParam
+    ? categoryIdsParam.split(',').map((id) => parseInt(id))
+    : [];
 
-class FlashCardCategories extends React.Component<Props, State> {
-  private flashCardsRepository = new FlashCardsRepository();
-  private flashCardCategoriesRepository = new FlashCardCategoriesRepository();
+  return {
+    categoryIds,
+    questionText: searchParams.get('questionText') || '',
+    answerText: searchParams.get('answerText') || '',
+  };
+};
 
-  constructor(props: Props) {
-    super(props);
+const getNumberParam = (
+  searchParams: URLSearchParams,
+  paramName: string,
+  defaultValue: number
+): number => {
+  const param = searchParams.get(paramName);
+  return param ? parseInt(param) : defaultValue;
+};
 
-    this.state = {
-      flashCards: [],
-      flashCardCategories: [],
-      categoryIds: [],
-      questionText: '',
-      answerText: '',
-    };
-  }
+function FlashCardCategories() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [totalPages, setTotalPages] = useState(1);
+  const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
+  const [flashCardCategories, setFlashCardCategories] = useState<
+    FlashCardCategory[]
+  >([]);
 
-  componentDidMount() {
-    this.getFlashCards();
-    this.getFlashCardCategories();
-  }
+  const perPage = getNumberParam(searchParams, 'per_page', 10);
+  const page = getNumberParam(searchParams, 'page', 1);
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.shouldGetFlashCards(prevState)) {
-      this.getFlashCards();
-    }
-  }
-
-  onFiltersChange = (filters: Filters) => {
-    this.setState(filters);
+  const setFilters = (filters: Filters) => {
+    const urlSearchParams = new URLSearchParams(filters as any);
+    setSearchParams(urlSearchParams);
   };
 
-  shouldGetFlashCards(prevState: State): boolean {
-    const fieldsToCheck = [
-      'categoryIds',
-      'questionText',
-      'answerText',
-    ] as const;
+  const setPage = (page: number) => {
+    const urlSearchParams = new URLSearchParams(searchParams);
+    urlSearchParams.set('page', page.toString());
+    setSearchParams(urlSearchParams);
+  };
 
-    return fieldsToCheck.some(
-      (fieldName: typeof fieldsToCheck[number]) =>
-        prevState[fieldName] !== this.state[fieldName]
-    );
-  }
+  const filters = buildFilters(searchParams);
 
-  async getFlashCardCategories() {
-    const flashCardCategories =
-      await this.flashCardCategoriesRepository.index();
-    this.setState({flashCardCategories});
-  }
+  const getFlashCardParams = () => {
+    const {categoryIds, questionText, answerText} = filters;
 
-  async getFlashCards() {
-    const flashCards = await this.flashCardsRepository.index(
-      this.flashCardParams()
-    );
-
-    this.setState({flashCards});
-  }
-
-  flashCardParams() {
-    const {categoryIds, questionText, answerText} = this.state;
-
-    const params: {[name: string]: string | Array<number>} = {};
+    const params: {[name: string]: string | number | Array<number>} = {
+      per_page: perPage,
+      page,
+    };
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;
     if (questionText) params.question_text = questionText;
     if (answerText) params.answer_text = answerText;
 
     return params;
-  }
-
-  onCategorySelected = (event: React.SyntheticEvent, categoryIds: number[]) => {
-    this.setState({categoryIds});
   };
 
-  render() {
-    const {
-      flashCards,
-      flashCardCategories,
-      categoryIds,
-      questionText,
-      answerText,
-    } = this.state;
+  const calcTotalPages = (totalElements: number) => {
+    return Math.ceil(totalElements / perPage);
+  };
 
-    return (
-      <div>
-        <FlashCardFilters
-          flashCardCategories={flashCardCategories}
-          filters={{categoryIds, questionText, answerText}}
-          onFiltersChange={this.onFiltersChange}
-        />
+  const getFlashCards = async () => {
+    const {data, meta} = await flashCardsRepository.index(getFlashCardParams());
 
-        <FlashCardsContainer>
-          {flashCards.map((flashCard) => (
-            <FlashCardAdminItem key={flashCard.id} flashCard={flashCard} />
-          ))}
-        </FlashCardsContainer>
-      </div>
-    );
-  }
+    setTotalPages(calcTotalPages(meta.total_elements));
+    setFlashCards(data);
+  };
+
+  const getFlashCardCategories = async () => {
+    const {data} = await flashCardCategoriesRepository.index();
+    setFlashCardCategories(data);
+  };
+
+  useEffect(() => {
+    getFlashCardCategories();
+
+    setFilters({
+      categoryIds: [],
+      questionText: '',
+      answerText: '',
+    });
+  }, []);
+
+  useEffect(() => {
+    getFlashCards();
+  }, [searchParams, page, perPage]);
+
+  return (
+    <div>
+      <FlashCardFilters
+        flashCardCategories={flashCardCategories}
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
+
+      <FlashCardsContainer>
+        {flashCards.map((flashCard) => (
+          <FlashCardAdminItem key={flashCard.id} flashCard={flashCard} />
+        ))}
+
+        <AppPagination page={page} totalPages={totalPages} onChange={setPage} />
+      </FlashCardsContainer>
+    </div>
+  );
 }
 
 const FlashCardsContainer = styled.div`

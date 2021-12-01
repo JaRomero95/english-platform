@@ -53,9 +53,9 @@ class IrregularVerbsPage extends React.Component<Props, State> {
 
   async getIrregularVerbs() {
     const repository = new IrregularVerbsRepository();
-    const irregularVerbs = await repository.index();
+    const {data} = await repository.index();
     this.setState({
-      irregularVerbs,
+      irregularVerbs: data,
       irregularVerbsResults: [],
     });
   }

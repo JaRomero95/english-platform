@@ -1,12 +1,18 @@
 import httpClient from './HttpClient';
 
+interface Pagination {
+  page: number;
+  per_page: number;
+  total_elements: number;
+}
+
 abstract class BaseRepository<T> {
   abstract readonly baseUrl: string;
 
-  public async index(params: {} = {}): Promise<T[]> {
+  public async index(params: {} = {}): Promise<{data: T[]; meta: Pagination}> {
     const {data} = await httpClient.get(this.baseUrl, {params});
 
-    return data.data;
+    return data;
   }
 
   public async update(id: number, payload?: T): Promise<T> {

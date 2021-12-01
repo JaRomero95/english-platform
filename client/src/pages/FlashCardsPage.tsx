@@ -80,9 +80,9 @@ class FlashCardsPage extends React.Component<Props, State> {
   }
 
   async getFlashCards() {
-    const flashCards = await this.repository.index({per_page: 10});
+    const {data} = await this.repository.index({per_page: 10});
 
-    const cardsToAdd = this.removeViewedCards(flashCards);
+    const cardsToAdd = this.removeViewedCards(data);
 
     this.setState((state) => ({
       flashCards: [...state.flashCards, ...cardsToAdd],

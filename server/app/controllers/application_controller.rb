@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
     {
       page: page,
       per_page: per_page.zero? ? elements.length : per_page,
-      total_elements: elements.size
+      total_elements: elements.unscoped.count
     }
   end
 
