@@ -86,7 +86,7 @@ class FlashCardsPage extends React.Component<Props, State> {
 
     this.setState((state) => ({
       flashCards: [...state.flashCards, ...cardsToAdd],
-      viewedCardIds: [...state.viewedCardIds, ...cardsToAdd.map((c) => c.id)],
+      viewedCardIds: [...state.viewedCardIds, ...cardsToAdd.map((c) => c.id!)],
       finished: !!cardsToAdd.length,
     }));
   }
@@ -94,7 +94,7 @@ class FlashCardsPage extends React.Component<Props, State> {
   removeViewedCards(flashCards: FlashCard[]): FlashCard[] {
     const {viewedCardIds} = this.state;
 
-    return flashCards.filter(({id}: FlashCard) => !viewedCardIds.includes(id));
+    return flashCards.filter(({id}: FlashCard) => !viewedCardIds.includes(id!));
   }
 
   getCurrentFlashCard(): FlashCard | null {
@@ -118,7 +118,7 @@ class FlashCardsPage extends React.Component<Props, State> {
 
     const flashCard = this.getCurrentFlashCard();
 
-    this.repository.update(flashCard!.id);
+    this.repository.update(flashCard!.id!);
 
     this.setState({counted: true});
   };

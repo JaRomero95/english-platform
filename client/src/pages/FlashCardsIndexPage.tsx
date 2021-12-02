@@ -7,7 +7,9 @@ import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepos
 import FlashCardCategory from 'models/FlashCardCategory';
 import FlashCardAdminItem from 'components/flash_cards/FlashCardAdminItem';
 import FlashCardFilters from 'components/flash_cards/FlashCardFilters';
+import FlashCardCreate from 'components/flash_cards/FlashCardCreate';
 import AppPagination from 'components/AppPagination';
+import AppButton from 'components/AppButton';
 import {Filters} from 'components/flash_cards/FlashCardFilters';
 
 const flashCardsRepository = new FlashCardsRepository();
@@ -37,6 +39,7 @@ const getNumberParam = (
 
 function FlashCardCategories() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
   const [flashCardCategories, setFlashCardCategories] = useState<
@@ -90,6 +93,11 @@ function FlashCardCategories() {
     setFlashCardCategories(data);
   };
 
+  const onFlashCardCreate = () => {
+    getFlashCards();
+    setShowCreateDialog(false);
+  };
+
   useEffect(() => {
     getFlashCardCategories();
 
@@ -112,13 +120,23 @@ function FlashCardCategories() {
         onFiltersChange={setFilters}
       />
 
+      <AppButton onClick={() => setShowCreateDialog(true)}>
+        Create Flash Card
+      </AppButton>
+
       <FlashCardsContainer>
         {flashCards.map((flashCard) => (
           <FlashCardAdminItem key={flashCard.id} flashCard={flashCard} />
         ))}
-
-        <AppPagination page={page} totalPages={totalPages} onChange={setPage} />
       </FlashCardsContainer>
+
+      <AppPagination page={page} totalPages={totalPages} onChange={setPage} />
+
+      <FlashCardCreate
+        open={showCreateDialog}
+        onClose={onFlashCardCreate}
+        flashCardCategories={flashCardCategories}
+      />
     </div>
   );
 }

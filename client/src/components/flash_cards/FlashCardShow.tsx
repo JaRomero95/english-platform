@@ -9,7 +9,7 @@ type FlashCardFace = {
 
 interface Props {
   flashCard: FlashCard;
-  onFlip: () => void;
+  onFlip?: () => void;
 }
 
 interface State {
@@ -24,7 +24,9 @@ class FlashCardShow extends React.Component<Props, State> {
   }
 
   flipCard = () => {
-    this.props.onFlip();
+    const {onFlip} = this.props;
+
+    onFlip && onFlip();
 
     this.setState((state) => ({
       flipped: !state.flipped,
@@ -73,8 +75,9 @@ const FlipCardContainer = styled.div`
   position: relative;
   transition: transform 0.3s;
   transform-style: preserve-3d;
-  width: 100%;
-  height: 80vh;
+  width: 320px;
+  height: 320px;
+  margin: 0 auto;
 
   &.flipped {
     transform: rotateY(180deg);

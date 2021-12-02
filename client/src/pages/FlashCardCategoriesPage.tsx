@@ -49,9 +49,7 @@ class FlashCardCategories extends React.Component<Props, State> {
     this.setState({flashCardCategories: data});
   }
 
-  onCreateCategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value;
-
+  onCreateCategoryNameChange = (name: string) => {
     this.setState((state) => ({
       newCategory: {
         ...state.newCategory,
@@ -60,9 +58,7 @@ class FlashCardCategories extends React.Component<Props, State> {
     }));
   };
 
-  onEditCategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value;
-
+  onEditCategoryNameChange = (name: string) => {
     this.setState((state) => ({
       editCategory: {
         ...state.editCategory,

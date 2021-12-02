@@ -4,6 +4,7 @@ import {ToggleButtonGroup, ToggleButton} from '@mui/material';
 import AppPaper from 'components/AppPaper';
 import AppInput from 'components/AppInput';
 import FlashCardCategory from 'models/FlashCardCategory';
+import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
 
 export interface Filters {
   categoryIds: number[];
@@ -26,20 +27,17 @@ class FlashCardFilters extends React.Component<Props, State> {
     this.state = {categoryIds: []};
   }
 
-  onCategorySelected = (event: React.SyntheticEvent, categoryIds: number[]) => {
+  onCategorySelected = (categoryIds: any) => {
     this.props.onFiltersChange({
       ...this.props.filters,
       categoryIds,
     });
   };
 
-  onTextFieldChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    name: 'questionText' | 'answerText'
-  ) => {
+  onTextFieldChange = (value: string, name: 'questionText' | 'answerText') => {
     this.props.onFiltersChange({
       ...this.props.filters,
-      [name]: event.target.value,
+      [name]: value,
     });
   };
 
@@ -51,20 +49,12 @@ class FlashCardFilters extends React.Component<Props, State> {
         <AppPaper>
           <FilterLabel>Categories</FilterLabel>
 
-          <CategoriesFilterGroup
-            color="primary"
-            value={filters.categoryIds}
-            onChange={this.onCategorySelected}
-          >
-            {flashCardCategories.map((flashCardCategory) => (
-              <ToggleButton
-                key={flashCardCategory.id}
-                value={flashCardCategory.id}
-              >
-                {flashCardCategory.name}
-              </ToggleButton>
-            ))}
-          </CategoriesFilterGroup>
+          <FlashCardCategorySelect
+            flashCardCategories={flashCardCategories}
+            selected={filters.categoryIds}
+            onSelected={this.onCategorySelected}
+            multiple
+          />
 
           <FieldContainer>
             <FilterLabel>Question text</FilterLabel>

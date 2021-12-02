@@ -59,11 +59,16 @@ const CardFace = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 
   > span {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.3);
     padding: 0 1rem;
+  }
+
+  &:first-child {
+    border-right: 1px solid #eee;
   }
 `;
 

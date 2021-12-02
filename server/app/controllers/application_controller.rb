@@ -13,11 +13,13 @@ class ApplicationController < ActionController::API
     {
       page: page,
       per_page: per_page.zero? ? elements.length : per_page,
-      total_elements: elements.unscoped.count
+      total_elements: @total_elements
     }
   end
 
   def paginate(criteria)
+    @total_elements = criteria.count
+
     return criteria if per_page.zero?
 
     selected_page = page.positive? ? page : 1
