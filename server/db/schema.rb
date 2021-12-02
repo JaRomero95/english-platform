@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_155743) do
+ActiveRecord::Schema.define(version: 2021_12_02_204223) do
 
   create_table "flash_card_categories", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(version: 2021_11_30_155743) do
   end
 
   create_table "flash_cards", force: :cascade do |t|
-    t.text "question_text"
-    t.string "question_img_url"
-    t.text "answer_text"
-    t.string "answer_img_url"
+    t.text "question_text", default: ""
+    t.string "question_img_url", default: ""
+    t.text "answer_text", default: ""
+    t.string "answer_img_url", default: ""
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

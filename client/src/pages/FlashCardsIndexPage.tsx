@@ -8,6 +8,7 @@ import FlashCardCategory from 'models/FlashCardCategory';
 import FlashCardAdminItem from 'components/flash_cards/FlashCardAdminItem';
 import FlashCardFilters from 'components/flash_cards/FlashCardFilters';
 import FlashCardCreate from 'components/flash_cards/FlashCardCreate';
+import FlashCardEdit from 'components/flash_cards/FlashCardEdit';
 import AppPagination from 'components/AppPagination';
 import AppButton from 'components/AppButton';
 import {Filters} from 'components/flash_cards/FlashCardFilters';
@@ -39,6 +40,9 @@ const getNumberParam = (
 
 function FlashCardCategories() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [flashCardToEdit, setFlashCardToEdit] = useState<FlashCard | null>(
+    null
+  );
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
@@ -98,6 +102,11 @@ function FlashCardCategories() {
     setShowCreateDialog(false);
   };
 
+  const onFlashCardUpdate = () => {
+    getFlashCards();
+    setFlashCardToEdit(null);
+  };
+
   useEffect(() => {
     getFlashCardCategories();
 
@@ -126,7 +135,12 @@ function FlashCardCategories() {
 
       <FlashCardsContainer>
         {flashCards.map((flashCard) => (
-          <FlashCardAdminItem key={flashCard.id} flashCard={flashCard} />
+          <RowWrapper
+            onClick={() => setFlashCardToEdit(flashCard)}
+            key={flashCard.id}
+          >
+            <FlashCardAdminItem flashCard={flashCard} />
+          </RowWrapper>
         ))}
       </FlashCardsContainer>
 
@@ -137,6 +151,15 @@ function FlashCardCategories() {
         onClose={onFlashCardCreate}
         flashCardCategories={flashCardCategories}
       />
+
+      {flashCardToEdit && (
+        <FlashCardEdit
+          open={!!flashCardToEdit}
+          onClose={onFlashCardUpdate}
+          flashCardCategories={flashCardCategories}
+          flashCard={flashCardToEdit}
+        />
+      )}
     </div>
   );
 }
@@ -147,6 +170,10 @@ const FlashCardsContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 10px;
+`;
+
+const RowWrapper = styled.div`
+  cursor: pointer;
 `;
 
 export default FlashCardCategories;

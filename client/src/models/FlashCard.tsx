@@ -5,4 +5,5 @@ export default interface FlashCard {
   answer_text: string;
   answer_img_url: string;
   flash_card_category_id: number | null;
+  last_answer_datetime?: string | null;
 }

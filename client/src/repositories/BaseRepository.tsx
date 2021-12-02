@@ -15,7 +15,7 @@ abstract class BaseRepository<T> {
     return data;
   }
 
-  public async update(id: number, payload?: T): Promise<T> {
+  public async update(id: number, payload?: Partial<T>): Promise<T> {
     const {data} = await httpClient.put(this.resourceUrl(id), {data: payload});
 
     return data.data;

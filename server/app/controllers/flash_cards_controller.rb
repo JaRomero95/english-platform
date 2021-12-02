@@ -29,9 +29,11 @@ class FlashCardsController < ApplicationController
       user: current_user
     )
 
-    flash_card.update! last_answer_datetime: Time.zone.now
-
-    render json: flash_card
+    if flash_card.update update_params
+      render json: show_response(flash_card), status: :created, location: flash_card
+    else
+      render json: flash_card.errors, status: :unprocessable_entity
+    end
   end
 
   private
@@ -47,6 +49,17 @@ class FlashCardsController < ApplicationController
       :answer_text,
       :answer_img_url,
       :flash_card_category_id
+    )
+  end
+
+  def update_params
+    params.require(:data).permit(
+      :question_text,
+      :question_img_url,
+      :answer_text,
+      :answer_img_url,
+      :flash_card_category_id,
+      :last_answer_datetime
     )
   end
 end

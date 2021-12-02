@@ -87,7 +87,7 @@ class FlashCardsPage extends React.Component<Props, State> {
     this.setState((state) => ({
       flashCards: [...state.flashCards, ...cardsToAdd],
       viewedCardIds: [...state.viewedCardIds, ...cardsToAdd.map((c) => c.id!)],
-      finished: !!cardsToAdd.length,
+      finished: !cardsToAdd.length,
     }));
   }
 
@@ -118,7 +118,9 @@ class FlashCardsPage extends React.Component<Props, State> {
 
     const flashCard = this.getCurrentFlashCard();
 
-    this.repository.update(flashCard!.id!);
+    this.repository.update(flashCard!.id!, {
+      last_answer_datetime: new Date().toISOString(),
+    });
 
     this.setState({counted: true});
   };

@@ -8,35 +8,28 @@ import FlashCardsRepository from 'repositories/FlashCardsRepository';
 interface Props {
   open: boolean;
   onClose: () => void;
+  flashCard: FlashCard;
   flashCardCategories: FlashCardCategory[];
 }
 
 const repository = new FlashCardsRepository();
 
-const flashCard: FlashCard = {
-  question_text: '',
-  question_img_url: '',
-  answer_text: '',
-  answer_img_url: '',
-  flash_card_category_id: null,
-};
-
-function FlashCardCreate(props: Props) {
-  const onCreateFlashCard = async (flashCard: FlashCard) => {
-    const response = await repository.create(flashCard);
+function FlashCardEdit(props: Props) {
+  const onUpdateFlashCard = async (flashCard: FlashCard) => {
+    await repository.update(flashCard.id!, flashCard);
 
     props.onClose();
   };
 
   return (
-    <AppFullScreenDialog {...props} title="Create Flash Card">
+    <AppFullScreenDialog {...props} title="Edit Flash Card">
       <FlashCardForm
-        flashCard={flashCard}
+        flashCard={props.flashCard}
         flashCardCategories={props.flashCardCategories}
-        onSubmit={onCreateFlashCard}
+        onSubmit={onUpdateFlashCard}
       />
     </AppFullScreenDialog>
   );
 }
 
-export default FlashCardCreate;
+export default FlashCardEdit;
