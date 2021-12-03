@@ -9,7 +9,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import styled from 'styled-components';
 import AppNavigationDrawer from 'components/AppNavigationDrawer';
 
-interface Props {}
+interface Props {
+  title: string;
+}
 
 interface State {
   openDrawer: boolean;
@@ -27,6 +29,7 @@ class AppBar extends React.Component<Props, State> {
   };
 
   render() {
+    const {title} = this.props;
     const {openDrawer} = this.state;
 
     return (
@@ -45,7 +48,7 @@ class AppBar extends React.Component<Props, State> {
             </IconButton>
 
             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-              <TitleLink to="/">English Platform</TitleLink>
+              <TitleLink to="/">{title}</TitleLink>
             </Typography>
 
             <IconButton component={Link} to="/" size="large" color="inherit">

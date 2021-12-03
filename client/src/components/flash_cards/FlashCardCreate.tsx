@@ -1,5 +1,4 @@
 import FlashCard from 'models/FlashCard';
-import React, {useState} from 'react';
 import AppFullScreenDialog from 'components/AppFullScreenDialog';
 import FlashCardForm from 'components/flash_cards/FlashCardForm';
 import FlashCardCategory from 'models/FlashCardCategory';
@@ -23,7 +22,7 @@ const flashCard: FlashCard = {
 
 function FlashCardCreate(props: Props) {
   const onCreateFlashCard = async (flashCard: FlashCard) => {
-    const response = await repository.create(flashCard);
+    await repository.create(flashCard);
 
     props.onClose();
   };

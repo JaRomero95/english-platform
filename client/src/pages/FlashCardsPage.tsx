@@ -6,7 +6,6 @@ import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
 import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
-import AppPageTitle from 'components/AppPageTitle';
 import AppButton from 'components/AppButton';
 import FlashCardCategory from 'models/FlashCardCategory';
 
@@ -188,8 +187,6 @@ class FlashCardsPage extends React.Component<Props, State> {
 
     return (
       <div>
-        <AppPageTitle>Flash Cards</AppPageTitle>
-
         <FlashCardCategorySelect
           flashCardCategories={flashCardCategories}
           selected={categoryIds}

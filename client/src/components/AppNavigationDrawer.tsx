@@ -7,7 +7,10 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import StyleIcon from '@mui/icons-material/Style';
+import {
+  Style as StyleIcon,
+  Category as CategoryIcon,
+} from '@mui/icons-material';
 import LinkOptions from 'models/LinkOptions';
 import mainRoutes from 'config/mainRoutes';
 
@@ -18,6 +21,11 @@ const bottomLinks: LinkOptions[] = [
     path: '/administration/flash-cards',
     title: 'Manage Flash Cards',
     icon: <StyleIcon />,
+  },
+  {
+    path: '/administration/flash-cards-categories',
+    title: 'Flash Card Categories',
+    icon: <CategoryIcon />,
   },
 ];
 

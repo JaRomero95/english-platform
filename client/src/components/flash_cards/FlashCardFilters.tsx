@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import {ToggleButtonGroup, ToggleButton} from '@mui/material';
 import AppPaper from 'components/AppPaper';
 import AppInput from 'components/AppInput';
 import FlashCardCategory from 'models/FlashCardCategory';
@@ -78,23 +77,6 @@ class FlashCardFilters extends React.Component<Props, State> {
     );
   }
 }
-
-const CategoriesFilterGroup = styled(ToggleButtonGroup)`
-  flex-wrap: wrap;
-
-  > button {
-    flex-grow: 1;
-    border-radius: 0;
-    border: 1px solid rgba(0, 0, 0, 0.12) !important;
-    margin-left: -1px;
-    margin-top: -1px;
-  }
-
-  &:after {
-    content: '';
-    flex-grow: 999; // Avoid last row grow
-  }
-`;
 
 const FieldContainer = styled.div`
   margin-top: 1rem;

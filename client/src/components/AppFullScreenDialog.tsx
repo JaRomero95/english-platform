@@ -1,20 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Toolbar,
-  IconButton,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  AppBar,
-} from '@mui/material';
+import {Dialog, Toolbar, IconButton, Typography, AppBar} from '@mui/material';
 import {Close as CloseIcon} from '@mui/icons-material';
 import styled from 'styled-components';
 
@@ -46,7 +32,7 @@ class AppFullScreenDialog extends React.Component<Props> {
           </Toolbar>
         </AppBar>
 
-        <Content>{this.props.children}</Content>
+        <Content>{children}</Content>
       </Dialog>
     );
   }
