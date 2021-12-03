@@ -10,9 +10,12 @@ import ListItemText from '@mui/material/ListItemText';
 import {
   Style as StyleIcon,
   Category as CategoryIcon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import LinkOptions from 'models/LinkOptions';
 import mainRoutes from 'config/mainRoutes';
+import {observer} from 'mobx-react-lite';
+import UserStoreContext from 'providers/UserStoreContext';
 
 const upperLinks: LinkOptions[] = mainRoutes;
 
@@ -34,34 +37,42 @@ interface Props {
   onClose: () => void;
 }
 
-class AppNavigationDrawer extends React.Component<Props> {
-  renderLinks(links: LinkOptions[]) {
-    return (
-      <List>
-        {links.map((link) => (
-          <ListItem component={Link} to={link.path} button key={link.path}>
-            <ListItemIcon>{link.icon}</ListItemIcon>
-            <ListItemText primary={link.title} />
-          </ListItem>
-        ))}
-      </List>
-    );
-  }
-  render() {
-    const {open, onClose} = this.props;
+const renderLinks = (links: LinkOptions[]) => (
+  <List>
+    {links.map((link) => (
+      <ListItem key={link.path} component={Link} to={link.path} button>
+        <ListItemIcon>{link.icon}</ListItemIcon>
+        <ListItemText primary={link.title} />
+      </ListItem>
+    ))}
+  </List>
+);
 
-    return (
-      <Drawer anchor="left" open={open} onClose={onClose}>
-        <Box sx={{width: 300}} onClick={onClose}>
-          {this.renderLinks(upperLinks)}
+const AppNavigationDrawer = observer((props: Props) => {
+  const {open, onClose} = props;
 
-          <Divider />
+  const userStore = React.useContext(UserStoreContext);
 
-          {this.renderLinks(bottomLinks)}
-        </Box>
-      </Drawer>
-    );
-  }
-}
+  return (
+    <Drawer anchor="left" open={open} onClose={onClose}>
+      <Box sx={{width: 300}} onClick={onClose}>
+        {renderLinks(upperLinks)}
+
+        <Divider />
+
+        {renderLinks(bottomLinks)}
+
+        <Divider />
+
+        <ListItem button onClick={() => userStore!.setToken(null)}>
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </Box>
+    </Drawer>
+  );
+});
 
 export default AppNavigationDrawer;

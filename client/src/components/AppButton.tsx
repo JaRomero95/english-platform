@@ -7,11 +7,19 @@ interface Props {
   disabled?: boolean;
   endIcon?: JSX.Element;
   size?: 'small' | 'medium' | 'large';
+  type?: 'button' | 'submit';
 }
 
 class AppButton extends React.Component<Props> {
   render() {
-    const {onClick, children, disabled, endIcon, size = 'medium'} = this.props;
+    const {
+      onClick,
+      children,
+      disabled,
+      endIcon,
+      size = 'medium',
+      type = 'button',
+    } = this.props;
 
     return (
       <StyledButton
@@ -19,6 +27,7 @@ class AppButton extends React.Component<Props> {
         disabled={disabled}
         endIcon={endIcon}
         size={size}
+        type={type}
         onClick={onClick}
       >
         {children}

@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   include Authenticable
 
+  rescue_from UnauthorizedError do |exception|
+    render json: { error: exception.message }, status: :unauthorized
+  end
+
   def index_response(elements)
     { data: elements, meta: pagination_info(elements) }
   end

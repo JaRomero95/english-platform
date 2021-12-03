@@ -9,7 +9,7 @@ class HomePage extends React.Component<LinkOptions> {
     const {path, title, icon} = this.props;
 
     return (
-      <LinkWrapper to={path}>
+      <LinkWrapper to={path!}>
         <StyledPaper>
           <IconWrapper>{icon}</IconWrapper>
 
