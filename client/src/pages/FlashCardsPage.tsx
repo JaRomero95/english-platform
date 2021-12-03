@@ -3,15 +3,20 @@ import React from 'react';
 import styled from 'styled-components';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
+import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
+import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
 import AppPageTitle from 'components/AppPageTitle';
 import AppButton from 'components/AppButton';
+import FlashCardCategory from 'models/FlashCardCategory';
 
 interface Props {}
 
 interface State {
   flashCards: FlashCard[];
   currentFlashCardIndex: number;
+  flashCardCategories: FlashCardCategory[];
+  categoryIds: number[];
   counted: boolean;
   finished: boolean;
   viewedCardIds: number[];
@@ -20,6 +25,8 @@ interface State {
 const initialState = {
   flashCards: [],
   viewedCardIds: [],
+  flashCardCategories: [],
+  categoryIds: [],
   currentFlashCardIndex: 0,
   counted: false,
   finished: false,
@@ -27,6 +34,7 @@ const initialState = {
 
 class FlashCardsPage extends React.Component<Props, State> {
   private repository = new FlashCardsRepository();
+  private categoriesRepository = new FlashCardCategoriesRepository();
 
   constructor(props: Props) {
     super(props);
@@ -35,11 +43,18 @@ class FlashCardsPage extends React.Component<Props, State> {
   }
 
   reset = () => {
-    this.setState({...initialState});
+    this.setState({
+      flashCards: [],
+      viewedCardIds: [],
+      currentFlashCardIndex: 0,
+      counted: false,
+      finished: false,
+    });
   };
 
   componentDidMount() {
     this.getFlashCards();
+    this.getFlashCardCategories();
     this.addKeyListeners();
   }
 
@@ -80,7 +95,13 @@ class FlashCardsPage extends React.Component<Props, State> {
   }
 
   async getFlashCards() {
-    const {data} = await this.repository.index({per_page: 10});
+    const {categoryIds} = this.state;
+
+    const params: {[key: string]: any} = {per_page: 10};
+
+    if (categoryIds.length) params.flash_card_category_ids = categoryIds;
+
+    const {data} = await this.repository.index(params);
 
     const cardsToAdd = this.removeViewedCards(data);
 
@@ -89,6 +110,14 @@ class FlashCardsPage extends React.Component<Props, State> {
       viewedCardIds: [...state.viewedCardIds, ...cardsToAdd.map((c) => c.id!)],
       finished: !cardsToAdd.length,
     }));
+  }
+
+  async getFlashCardCategories() {
+    const {data} = await this.categoriesRepository.index({per_page: 0});
+
+    this.setState({
+      flashCardCategories: data,
+    });
   }
 
   removeViewedCards(flashCards: FlashCard[]): FlashCard[] {
@@ -129,8 +158,13 @@ class FlashCardsPage extends React.Component<Props, State> {
     this.countCardAsViewed();
   };
 
+  onCategorySelected = (categoryIds: any) => {
+    this.setState({categoryIds});
+    this.reset();
+  };
+
   render() {
-    const {viewedCardIds} = this.state;
+    const {viewedCardIds, flashCardCategories, categoryIds} = this.state;
 
     const flashCard = this.getCurrentFlashCard();
 
@@ -155,6 +189,13 @@ class FlashCardsPage extends React.Component<Props, State> {
     return (
       <div>
         <AppPageTitle>Flash Cards</AppPageTitle>
+
+        <FlashCardCategorySelect
+          flashCardCategories={flashCardCategories}
+          selected={categoryIds}
+          onSelected={this.onCategorySelected}
+          multiple
+        />
 
         {flashCard && (
           <FlashCardShow
