@@ -9,6 +9,7 @@ import FlashCardsPage from 'pages/FlashCardsPage';
 import FlashCardsIndexPage from 'pages/FlashCardsIndexPage';
 import FlashCardCategoriesPage from 'pages/FlashCardCategoriesPage';
 import DefaultLayout from 'layouts/DefaultLayout';
+import FullHeightLayout from 'layouts/FullHeightLayout';
 
 const AppRoutes = observer(() => {
   const navigate = useNavigate();
@@ -41,7 +42,10 @@ const AppRoutes = observer(() => {
       <Route
         path="flash-cards"
         element={
-          <DefaultLayout title="Flash Cards" component={<FlashCardsPage />} />
+          <FullHeightLayout
+            title="Flash Cards"
+            component={<FlashCardsPage />}
+          />
         }
       />
       <Route

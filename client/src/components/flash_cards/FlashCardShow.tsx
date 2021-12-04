@@ -1,6 +1,8 @@
-import React from 'react';
-import FlashCard from 'models/FlashCard';
+import React, {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
+import {IconButton} from '@mui/material';
+import {Settings as SettingsIcon} from '@mui/icons-material';
+import FlashCard from 'models/FlashCard';
 
 type FlashCardFace = {
   text: string | null;
@@ -10,65 +12,79 @@ type FlashCardFace = {
 interface Props {
   flashCard: FlashCard;
   onFlip?: () => void;
+  onSettings?: () => void;
 }
 
-interface State {
-  flipped: boolean;
+function fillAvailableSquareSpace(domElement: HTMLDivElement) {
+  const parentElement = domElement!.parentElement!;
+  const availableWidth = parentElement.clientWidth;
+  const availableHeight = parentElement.clientHeight;
+  const limitedSpace =
+    availableWidth < availableHeight ? availableWidth : availableHeight;
+  const dimension = `${limitedSpace * 0.85}px`;
+  domElement.style.width = dimension;
+  domElement.style.height = dimension;
 }
 
-class FlashCardShow extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+function FlashCardShow(props: Props) {
+  const [flipped, setFlipped] = useState(false);
+  const {onFlip, flashCard, onSettings} = props;
+  const cardElement = useRef(null);
 
-    this.state = {flipped: false};
-  }
-
-  flipCard = () => {
-    const {onFlip} = this.props;
-
+  const flipCard = () => {
     onFlip && onFlip();
 
-    this.setState((state) => ({
-      flipped: !state.flipped,
-    }));
+    setFlipped(!flipped);
   };
 
-  renderCard({text, imgUrl}: FlashCardFace) {
+  const onSettingsClick = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    onSettings!();
+  };
+
+  const renderCard = ({text, imgUrl}: FlashCardFace) => {
     const alternativeTextClass = imgUrl ? 'alternative-text' : '';
 
     return (
-      <CardContainer onClick={this.flipCard}>
+      <CardContainer onClick={flipCard}>
         {imgUrl && <CardImage src={imgUrl} />}
+
         {text && <CardText className={alternativeTextClass}>{text}</CardText>}
+
+        {onSettings && (
+          <SettingIconContainer>
+            <IconButton size="large" onClick={onSettingsClick}>
+              <SettingsIcon fontSize="inherit" />
+            </IconButton>
+          </SettingIconContainer>
+        )}
       </CardContainer>
     );
-  }
+  };
 
-  render() {
-    const {
-      props: {flashCard},
-      state: {flipped},
-    } = this;
+  useEffect(() => {
+    fillAvailableSquareSpace(cardElement.current!);
 
-    const frontCard = {
-      text: flashCard.question_text,
-      imgUrl: flashCard.question_img_url,
-    };
-
-    const backCard = {
-      text: flashCard.answer_text,
-      imgUrl: flashCard.answer_img_url,
-    };
-
-    const containerClass = flipped ? 'flipped' : '';
-
-    return (
-      <FlipCardContainer className={containerClass}>
-        {this.renderCard(frontCard)}
-        {this.renderCard(backCard)}
-      </FlipCardContainer>
+    window.addEventListener('resize', () =>
+      fillAvailableSquareSpace(cardElement.current!)
     );
-  }
+  }, []);
+
+  const containerClass = flipped ? 'flipped' : '';
+
+  return (
+    <FlipCardContainer className={containerClass} ref={cardElement}>
+      {renderCard({
+        text: flashCard.question_text,
+        imgUrl: flashCard.question_img_url,
+      })}
+
+      {renderCard({
+        text: flashCard.answer_text,
+        imgUrl: flashCard.answer_img_url,
+      })}
+    </FlipCardContainer>
+  );
 }
 
 const FlipCardContainer = styled.div`
@@ -129,6 +145,12 @@ const CardText = styled.span`
     padding: 0 0.5rem;
     border-radius: 10px;
   }
+`;
+
+const SettingIconContainer = styled.div`
+  position: absolute;
+  left: 5px;
+  top: 5px;
 `;
 
 export default FlashCardShow;

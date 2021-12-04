@@ -8,6 +8,7 @@ interface Props {
   endIcon?: JSX.Element;
   size?: 'small' | 'medium' | 'large';
   type?: 'button' | 'submit';
+  className?: string;
 }
 
 class AppButton extends React.Component<Props> {
@@ -17,6 +18,7 @@ class AppButton extends React.Component<Props> {
       children,
       disabled,
       endIcon,
+      className,
       size = 'medium',
       type = 'button',
     } = this.props;
@@ -28,6 +30,7 @@ class AppButton extends React.Component<Props> {
         endIcon={endIcon}
         size={size}
         type={type}
+        className={className}
         onClick={onClick}
       >
         {children}
