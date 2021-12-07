@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000/';
+const baseURL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000/';
 
-const instance = axios.create({baseUrl});
+const instance = axios.create({baseURL});
 
 instance.interceptors.request.use((config: any) => {
   // FIXME: extract a module with localStorage access to avoid repeat this code present in UserStoreContext

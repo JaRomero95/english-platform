@@ -136,6 +136,7 @@ function FlashCardsPage() {
         </div>
       );
     } else {
+      // FIXME: this message is displayed when you filter by a category
       return (
         <div>
           <p>There are any cards. Create one.</p>
