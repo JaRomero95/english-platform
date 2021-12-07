@@ -295,26 +295,3 @@ IrregularVerb.create!(base: 'withstand', past_tense: 'withstood', past_participl
 IrregularVerb.create!(base: 'work', past_tense: 'worked/wrought', past_participle: 'worked/wrought')
 IrregularVerb.create!(base: 'wring', past_tense: 'wrung', past_participle: 'wrung')
 IrregularVerb.create!(base: 'write', past_tense: 'wrote', past_participle: 'written')
-
-user = User.first || User.create! email: 'test'
-
-FlashCard.create! user: user,
-                  question_text: 'Question 1',
-                  question_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOXh4BMt3WTRIiZ7P1kdy_GH_ntU3ozWsnFqJVUo_AWcWqQdiDEXRJPwQErbmwuVugOAI&usqp=CAU',
-                  answer_text: 'Answer 1',
-                  answer_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEAfDKhSuMwzhuDWYEIJRM-coMCYmaFderHg&usqp=CAU'
-FlashCard.create! user: user,
-                  question_text: 'Question 2',
-                  question_img_url: 'https://pbs.twimg.com/profile_images/1188507013233479681/WuNwaQ8R_400x400.jpg',
-                  answer_text: 'Answer 2',
-                  answer_img_url: 'https://img.youtube.com/vi/5t1upZ6Yuzo/hqdefault.jpg'
-FlashCard.create! user: user,
-                  question_text: 'Question 3',
-                  question_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7H4GZI9rWRCjTEspbFVSbB_9Y0BkFLe_w5l5481l8ChQn4_pWm_lShJSwDKgUg0fEUb8&usqp=CAU',
-                  answer_text: 'Answer 3',
-                  answer_img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7zJ3zEFDWsl2TMza9_KRkroXa5dXDcknvVej4diEkBE6fcSI_l9e9pXIWn_ehWsAW2QY&usqp=CAU'
-FlashCard.create! user: user,
-                  question_text: 'Question 4',
-                  question_img_url: 'https://stickerly.pstatic.net/sticker_pack/4LRevtriqE5N13OuYyntUg/0EMLYD/3/c33ac91d-593b-48f0-8326-45143283be74.png',
-                  answer_text: 'Answer 4',
-                  answer_img_url: 'https://1.bp.blogspot.com/-Kczg7emPbwc/X3_rIy-uLNI/AAAAAAAADvA/2M-Tby7Y4jMZdPBtD7vUdSr_3x8TcOtEgCLcBGAsYHQ/w320-h192/preguntas%2Brandom3.gif'
