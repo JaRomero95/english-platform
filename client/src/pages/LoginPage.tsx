@@ -31,7 +31,7 @@ function LoginPage() {
   return (
     <Container>
       <SubContainer>
-        <Title>English Platform</Title>
+        <Title>Zero To English</Title>
 
         <AppPaper>
           <form onSubmit={onSubmit}>

@@ -7,7 +7,7 @@ interface Props {
 }
 
 function DefaultLayout(props: Props) {
-  const title = props.title || 'English Platform';
+  const title = props.title || 'Zero To English';
 
   return (
     <div>
