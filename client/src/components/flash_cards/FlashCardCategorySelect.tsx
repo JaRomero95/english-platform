@@ -12,6 +12,8 @@ interface Props {
 function FlashCardCategorySelect(props: Props) {
   const {multiple, flashCardCategories, selected, onSelected} = props;
 
+  if (!flashCardCategories.length) return <div>No categories yet</div>;
+
   return (
     <CategoriesFilterGroup
       exclusive={!multiple}

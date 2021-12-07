@@ -127,43 +127,14 @@ function FlashCardsPage() {
   };
 
   const emptyState = () => {
-    if (viewedCardIds.length) {
-      return (
-        <div>
-          <p>There are not more cards</p>
-
-          <AppButton onClick={reset}>Start again</AppButton>
-        </div>
-      );
-    } else {
-      // FIXME: this message is displayed when you filter by a category
-      return (
-        <div>
-          <p>There are any cards. Create one.</p>
-        </div>
-      );
-    }
+    return (
+      <EmptyStateMessage>
+        {viewedCardIds.length ? 'There are not more cards' : 'No cards found'}
+      </EmptyStateMessage>
+    );
   };
 
   const flashCard = getCurrentFlashCard();
-
-  if (!flashCard) {
-    if (viewedCardIds.length) {
-      return (
-        <div>
-          <p>There are not more cards</p>
-
-          <AppButton onClick={reset}>Start again</AppButton>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <p>There are any cards. Create one.</p>
-        </div>
-      );
-    }
-  }
 
   return (
     <Container>
@@ -220,7 +191,7 @@ const Container = styled.div`
 
 const StyledButton = styled(AppButton)`
   height: 6vh;
-  border-radius: 0;
+  border-radius: 0 !important;
 `;
 
 const StyledPaper = styled(AppPaper)`
@@ -228,7 +199,7 @@ const StyledPaper = styled(AppPaper)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 0;
+  border-radius: 0 !important;
 `;
 
 const PaperTitle = styled.span`
@@ -243,6 +214,13 @@ const FlashCardContainer = styled.div`
   flex-grow: 2;
   display: flex;
   align-items: center;
+`;
+
+const EmptyStateMessage = styled.div`
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
 `;
 
 export default FlashCardsPage;
