@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {Add as AddIcon} from '@mui/icons-material';
@@ -39,7 +39,7 @@ const getNumberParam = (
   return param ? parseInt(param) : defaultValue;
 };
 
-function FlashCardCategories() {
+function FlashCardsIndexPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [flashCardToEdit, setFlashCardToEdit] = useState<FlashCard | null>(
     null
@@ -53,6 +53,16 @@ function FlashCardCategories() {
 
   const perPage = getNumberParam(searchParams, 'per_page', 12);
   const page = getNumberParam(searchParams, 'page', 1);
+
+  const indexedCategories = useMemo(() => {
+    const indexedCategories: {[id: number]: FlashCardCategory} = {};
+
+    flashCardCategories.forEach((category) => {
+      indexedCategories[category.id!] = category;
+    });
+
+    return indexedCategories;
+  }, [flashCardCategories]);
 
   const setFilters = (filters: Filters) => {
     const urlSearchParams = new URLSearchParams(filters as any);
@@ -143,14 +153,21 @@ function FlashCardCategories() {
       </CreateButton>
 
       <FlashCardsContainer>
-        {flashCards.map((flashCard) => (
-          <RowWrapper
-            onClick={() => setFlashCardToEdit(flashCard)}
-            key={flashCard.id}
-          >
-            <FlashCardAdminItem flashCard={flashCard} />
-          </RowWrapper>
-        ))}
+        {flashCards.map((flashCard) => {
+          const category = indexedCategories[flashCard.flash_card_category_id!];
+
+          return (
+            <RowWrapper
+              onClick={() => setFlashCardToEdit(flashCard)}
+              key={flashCard.id}
+            >
+              <FlashCardAdminItem
+                flashCard={flashCard}
+                flashCardCategory={category}
+              />
+            </RowWrapper>
+          );
+        })}
       </FlashCardsContainer>
 
       <AppPagination page={page} totalPages={totalPages} onChange={setPage} />
@@ -189,4 +206,4 @@ const CreateButton = styled(AppButton)`
   margin-top: 1rem;
 `;
 
-export default FlashCardCategories;
+export default FlashCardsIndexPage;
