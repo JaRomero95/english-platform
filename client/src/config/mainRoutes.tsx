@@ -1,5 +1,8 @@
-import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtl';
-import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+import {
+  FormatListNumberedRtl as FormatListNumberedRtlIcon,
+  AutoAwesomeMotion as AutoAwesomeMotionIcon,
+  Forum as ForumIcon,
+} from '@mui/icons-material';
 
 export default [
   {
@@ -8,8 +11,15 @@ export default [
     icon: <AutoAwesomeMotionIcon />,
   },
   {
+    path: '',
+    title: 'Verb Tenses',
+    icon: <ForumIcon />,
+    disabled: true,
+  },
+  {
     path: '/irregular-verbs',
     title: 'Irregular Verbs',
     icon: <FormatListNumberedRtlIcon />,
+    disabled: true,
   },
 ];

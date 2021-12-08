@@ -88,6 +88,7 @@ function FlashCardShow(props: Props) {
 }
 
 const FlipCardContainer = styled.div`
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   position: relative;
   transition: transform 0.3s;
   transform-style: preserve-3d;

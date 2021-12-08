@@ -17,7 +17,7 @@ import mainRoutes from 'config/mainRoutes';
 import {observer} from 'mobx-react-lite';
 import UserStoreContext from 'providers/UserStoreContext';
 
-const upperLinks: LinkOptions[] = mainRoutes;
+const upperLinks: LinkOptions[] = mainRoutes.filter((route) => !route.disabled);
 
 const bottomLinks: LinkOptions[] = [
   {

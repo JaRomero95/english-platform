@@ -1,5 +1,6 @@
 import AppBar from 'components/AppBar';
-import AppContentLayout from 'components/AppContentLayout';
+import styled from 'styled-components';
+import stylesConfig from 'config/styles';
 
 interface Props {
   component: JSX.Element;
@@ -13,9 +14,18 @@ function DefaultLayout(props: Props) {
     <div>
       <AppBar title={title} />
 
-      <AppContentLayout>{props.component}</AppContentLayout>
+      <Container>{props.component}</Container>
     </div>
   );
 }
+
+const Container = styled.div`
+  padding-top: ${stylesConfig.LAYOUT_SM_VERTICAL_PADDING};
+  padding-bottom: ${stylesConfig.LAYOUT_SM_VERTICAL_PADDING};
+  padding-left: ${stylesConfig.LAYOUT_SM_SIDE_PADDING};
+  padding-right: ${stylesConfig.LAYOUT_SM_SIDE_PADDING};
+  margin: 0 auto;
+  max-width: 1000px;
+`;
 
 export default DefaultLayout;

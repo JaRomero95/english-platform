@@ -1,17 +1,37 @@
 import React from 'react';
+import styled from 'styled-components';
 import AppLinkCard from 'components/AppLinkCard';
 import mainRoutes from 'config/mainRoutes';
 
 class HomePage extends React.Component {
   render() {
     return (
-      <div>
+      <Container>
         {mainRoutes.map((link) => (
-          <AppLinkCard key={link.path} {...link} />
+          <LinkItem key={link.path} {...link} />
         ))}
-      </div>
+      </Container>
     );
   }
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem 0;
+`;
+
+const LinkItem = styled(AppLinkCard)`
+  width: 100%;
+
+  @media (min-width: 650px) {
+    width: 48%;
+  }
+
+  @media (min-width: 900px) {
+    width: 31%;
+  }
+`;
 
 export default HomePage;
