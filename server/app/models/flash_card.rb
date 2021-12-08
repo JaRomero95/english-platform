@@ -9,11 +9,11 @@ class FlashCard < ApplicationRecord
     end
 
     def filter_by_question_text(question_text)
-      where(question_text: question_text)
+      where('question_text ILIKE ?', "%#{question_text}%")
     end
 
     def filter_by_answer_text(answer_text)
-      where(answer_text: answer_text)
+      where('answer_text ILIKE ?', "%#{answer_text}%")
     end
   end
 end
