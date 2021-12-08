@@ -17,8 +17,16 @@ class LoadingStore {
       decrementLoading: action,
     });
 
-    addBeforeRequestAction(() => this.incrementLoading());
-    addAfterRequestAction(() => this.decrementLoading());
+    addBeforeRequestAction((config: any) => {
+      const skipLoading = !!config?.options?.skipLoading;
+
+      if (!skipLoading) this.incrementLoading();
+    });
+    addAfterRequestAction((response: any) => {
+      const skipLoading = !!response?.config?.options?.skipLoading;
+
+      if (!skipLoading) this.decrementLoading();
+    });
   }
 
   get isLoading() {

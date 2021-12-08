@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import {
   ArrowForward as ArrowForwardIcon,
   ExpandMore as ExpandMoreIcon,
+  Replay as ReplayIcon,
 } from '@mui/icons-material';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
@@ -15,7 +16,6 @@ import FlashCardShow from 'components/flash_cards/FlashCardShow';
 import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
 import FlashCardEdit from 'components/flash_cards/FlashCardEdit';
 import AppButton from 'components/AppButton';
-import AppPaper from 'components/AppPaper';
 import FlashCardCategory from 'models/FlashCardCategory';
 
 const repository = new FlashCardsRepository();
@@ -32,6 +32,12 @@ function FlashCardsPage() {
   const [counted, setCounted] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+
+  const getCurrentFlashCard = (): FlashCard | null => {
+    return flashCards[currentFlashCardIndex];
+  };
+
+  const flashCard = getCurrentFlashCard();
 
   const reset = () => {
     setFlashCards([]);
@@ -67,7 +73,7 @@ function FlashCardsPage() {
 
   useEffect(() => {
     if (needMoreFlashCards()) getFlashCards();
-  }, [currentFlashCardIndex, flashCards]);
+  }, [currentFlashCardIndex]);
 
   const needMoreFlashCards = (): boolean => {
     if (finished) return false;
@@ -82,7 +88,9 @@ function FlashCardsPage() {
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;
 
-    const {data} = await repository.index(params);
+    const firstLoad = !flashCards.length;
+
+    const {data} = await repository.index(params, {skipLoading: !firstLoad});
 
     const cardsToAdd = removeViewedCards(data);
 
@@ -101,10 +109,6 @@ function FlashCardsPage() {
     return flashCards.filter(({id}: FlashCard) => !viewedCardIds.includes(id!));
   };
 
-  const getCurrentFlashCard = (): FlashCard | null => {
-    return flashCards[currentFlashCardIndex];
-  };
-
   const nextCard = () => {
     countCardAsViewed();
     setCurrentFlashCardIndex(currentFlashCardIndex + 1);
@@ -114,11 +118,13 @@ function FlashCardsPage() {
   const countCardAsViewed = () => {
     if (counted) return;
 
-    const flashCard = getCurrentFlashCard();
-
-    repository.update(flashCard!.id!, {
-      last_answer_datetime: new Date().toISOString(),
-    });
+    repository.update(
+      flashCard!.id!,
+      {
+        last_answer_datetime: new Date().toISOString(),
+      },
+      {skipLoading: true}
+    );
 
     setCounted(true);
   };
@@ -136,12 +142,19 @@ function FlashCardsPage() {
     // TODO: add button to reset the game after finish
     return (
       <EmptyStateMessage>
-        {viewedCardIds.length ? 'There are not more cards' : 'No cards found'}
+        {viewedCardIds.length ? (
+          <>
+            <div>There are not more cards</div>
+            <ResetButton endIcon={<ReplayIcon />} onClick={reset}>
+              Reset
+            </ResetButton>
+          </>
+        ) : (
+          <div>No cards found</div>
+        )}
       </EmptyStateMessage>
     );
   };
-
-  const flashCard = getCurrentFlashCard();
 
   return (
     <Container>
@@ -225,6 +238,12 @@ const EmptyStateMessage = styled.div`
   font-weight: bold;
   text-align: center;
   width: 100%;
+  padding: 0 2rem;
+`;
+
+const ResetButton = styled(AppButton)`
+  width: 200px;
+  margin-top: 1rem !important;
 `;
 
 export default FlashCardsPage;
