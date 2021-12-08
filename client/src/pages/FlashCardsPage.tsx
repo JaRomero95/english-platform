@@ -207,6 +207,17 @@ function FlashCardsPage() {
       >
         Next card
       </StyledButton>
+
+      {flashCards.map(({id, question_img_url, answer_img_url}: FlashCard) => (
+        <span key={id}>
+          {question_img_url && (
+            <link rel="preload" as="image" href={question_img_url} />
+          )}
+          {answer_img_url && (
+            <link rel="preload" as="image" href={answer_img_url} />
+          )}
+        </span>
+      ))}
     </Container>
   );
 }
