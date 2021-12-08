@@ -51,7 +51,7 @@ function FlashCardCategories() {
     FlashCardCategory[]
   >([]);
 
-  const perPage = getNumberParam(searchParams, 'per_page', 10);
+  const perPage = getNumberParam(searchParams, 'per_page', 12);
   const page = getNumberParam(searchParams, 'page', 1);
 
   const setFilters = (filters: Filters) => {
@@ -121,6 +121,9 @@ function FlashCardCategories() {
   useEffect(() => {
     getFlashCards();
   }, [searchParams, page, perPage]);
+
+  // TODO: display category to identify easily cards without category
+  // TODO: Add a "no category" filter
 
   return (
     <div>

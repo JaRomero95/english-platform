@@ -25,6 +25,9 @@ function FlashCardCreate(props: Props) {
     });
   };
 
+  // TODO: Add submit functionality to save on enter
+  // TODO: Separate fields to easy go to target text/img field without confusions cause both are text fields
+
   return (
     <div>
       <FlashCardCategorySelect
