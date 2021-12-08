@@ -251,9 +251,7 @@ class FlashCardCategories extends React.Component<Props, State> {
           ))}
 
           {!flashCardCategories.length && (
-            <CategoryItem>
-              <span>There are no categories yet</span>
-            </CategoryItem>
+            <EmptyStateText>There are no categories yet</EmptyStateText>
           )}
         </Paper>
         {this.deleteDialogMarkup()}
@@ -283,6 +281,12 @@ const CategoryItem = styled.div`
     justify-content: space-between;
     line-height: 3em;
   }
+`;
+
+const EmptyStateText = styled.div`
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
 `;
 
 export default FlashCardCategories;

@@ -1,42 +1,43 @@
-import React from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 
 interface Props {
   onClick: (event: React.SyntheticEvent) => void;
   disabled?: boolean;
+  startIcon?: JSX.Element;
   endIcon?: JSX.Element;
   size?: 'small' | 'medium' | 'large';
   type?: 'button' | 'submit';
   className?: string;
+  children: any;
 }
 
-class AppButton extends React.Component<Props> {
-  render() {
-    const {
-      onClick,
-      children,
-      disabled,
-      endIcon,
-      className,
-      size = 'medium',
-      type = 'button',
-    } = this.props;
+function AppButton(props: Props) {
+  const {
+    onClick,
+    children,
+    disabled,
+    startIcon,
+    endIcon,
+    className,
+    size = 'medium',
+    type = 'button',
+  } = props;
 
-    return (
-      <StyledButton
-        variant="contained"
-        disabled={disabled}
-        endIcon={endIcon}
-        size={size}
-        type={type}
-        className={className}
-        onClick={onClick}
-      >
-        {children}
-      </StyledButton>
-    );
-  }
+  return (
+    <StyledButton
+      variant="contained"
+      disabled={disabled}
+      startIcon={startIcon}
+      endIcon={endIcon}
+      size={size}
+      type={type}
+      className={className}
+      onClick={onClick}
+    >
+      {children}
+    </StyledButton>
+  );
 }
 
 const StyledButton = styled(Button)`

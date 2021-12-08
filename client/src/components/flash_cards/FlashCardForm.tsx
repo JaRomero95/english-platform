@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
+import styled from 'styled-components';
+import {Save as SaveIcon} from '@mui/icons-material';
 import FlashCard from 'models/FlashCard';
 import AppInput from 'components/AppInput';
 import AppButton from 'components/AppButton';
@@ -60,9 +62,15 @@ function FlashCardCreate(props: Props) {
 
       <FlashCardShow flashCard={flashCard} />
 
-      <AppButton onClick={() => onSubmit(flashCard)}>Save</AppButton>
+      <SaveButton startIcon={<SaveIcon />} onClick={() => onSubmit(flashCard)}>
+        Save
+      </SaveButton>
     </div>
   );
 }
+
+const SaveButton = styled(AppButton)`
+  margin-top: 1rem;
+`;
 
 export default FlashCardCreate;

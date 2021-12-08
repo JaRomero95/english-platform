@@ -12,27 +12,37 @@ interface Props {
 function FlashCardCategorySelect(props: Props) {
   const {multiple, flashCardCategories, selected, onSelected} = props;
 
-  if (!flashCardCategories.length) return <div>No categories yet</div>;
-
   return (
-    <CategoriesFilterGroup
-      exclusive={!multiple}
-      color="primary"
-      value={selected}
-      onChange={(event, values) => onSelected(values)}
-    >
-      {flashCardCategories.map((flashCardCategory) => (
-        <ToggleButton key={flashCardCategory.id} value={flashCardCategory.id}>
-          {flashCardCategory.name}
-        </ToggleButton>
-      ))}
-    </CategoriesFilterGroup>
+    <Container>
+      {flashCardCategories.length ? (
+        <CategoriesFilterGroup
+          exclusive={!multiple}
+          color="primary"
+          value={selected}
+          onChange={(event, values) => onSelected(values)}
+        >
+          {flashCardCategories.map((flashCardCategory) => (
+            <ToggleButton
+              key={flashCardCategory.id}
+              value={flashCardCategory.id}
+            >
+              {flashCardCategory.name}
+            </ToggleButton>
+          ))}
+        </CategoriesFilterGroup>
+      ) : (
+        <div>No categories yet</div>
+      )}
+    </Container>
   );
 }
 
+const Container = styled.div`
+  margin-bottom: 1rem;
+`;
+
 const CategoriesFilterGroup = styled(ToggleButtonGroup)`
   flex-wrap: wrap;
-  margin-bottom: 1rem;
 
   > button {
     flex-grow: 1;

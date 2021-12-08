@@ -1,5 +1,5 @@
 import {useContext, useEffect} from 'react';
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import UserStoreContext from 'providers/UserStoreContext';
 import LoginPage from 'pages/LoginPage';
@@ -13,14 +13,15 @@ import FullHeightLayout from 'layouts/FullHeightLayout';
 
 const AppRoutes = observer(() => {
   const navigate = useNavigate();
+  const location = useLocation();
   const userStoreContext = useContext(UserStoreContext);
   const token = userStoreContext!.token;
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
+    if (token) {
+      if (location.pathname === '/login') navigate('/');
     } else {
-      navigate('/');
+      navigate('/login');
     }
   }, [token]);
 
@@ -52,7 +53,7 @@ const AppRoutes = observer(() => {
         path="administration/flash-cards"
         element={
           <DefaultLayout
-            title="FlashCardsIndexPage"
+            title="Manage Flash Cards"
             component={<FlashCardsIndexPage />}
           />
         }
@@ -61,7 +62,7 @@ const AppRoutes = observer(() => {
         path="administration/flash-cards-categories"
         element={
           <DefaultLayout
-            title="FlashCardCategoriesPage"
+            title="Flash Card Categories"
             component={<FlashCardCategoriesPage />}
           />
         }

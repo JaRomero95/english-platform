@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import styled from 'styled-components';
+import {Add as AddIcon} from '@mui/icons-material';
 import FlashCard from 'models/FlashCard';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
@@ -129,9 +130,12 @@ function FlashCardCategories() {
         onFiltersChange={setFilters}
       />
 
-      <AppButton onClick={() => setShowCreateDialog(true)}>
+      <CreateButton
+        startIcon={<AddIcon />}
+        onClick={() => setShowCreateDialog(true)}
+      >
         Create Flash Card
-      </AppButton>
+      </CreateButton>
 
       <FlashCardsContainer>
         {flashCards.map((flashCard) => (
@@ -174,6 +178,10 @@ const FlashCardsContainer = styled.div`
 
 const RowWrapper = styled.div`
   cursor: pointer;
+`;
+
+const CreateButton = styled(AppButton)`
+  margin-top: 1rem;
 `;
 
 export default FlashCardCategories;

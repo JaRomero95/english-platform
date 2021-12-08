@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import FlashCard from 'models/FlashCard';
 import styled from 'styled-components';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import {
+  ArrowForward as ArrowForwardIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
@@ -35,7 +42,6 @@ function FlashCardsPage() {
   };
 
   useEffect(() => {
-    getFlashCards();
     getFlashCardCategories();
   }, []);
 
@@ -61,7 +67,7 @@ function FlashCardsPage() {
 
   useEffect(() => {
     if (needMoreFlashCards()) getFlashCards();
-  }, [currentFlashCardIndex]);
+  }, [currentFlashCardIndex, flashCards]);
 
   const needMoreFlashCards = (): boolean => {
     if (finished) return false;
@@ -138,16 +144,24 @@ function FlashCardsPage() {
 
   return (
     <Container>
-      <StyledPaper>
-        <PaperTitle>Filter by categories</PaperTitle>
+      <StyledAccordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Filter by categories</Typography>
+        </AccordionSummary>
 
-        <FlashCardCategorySelect
-          flashCardCategories={flashCardCategories}
-          selected={categoryIds}
-          onSelected={onCategorySelected}
-          multiple
-        />
-      </StyledPaper>
+        <AccordionDetails>
+          <FlashCardCategorySelect
+            flashCardCategories={flashCardCategories}
+            selected={categoryIds}
+            onSelected={onCategorySelected}
+            multiple
+          />
+        </AccordionDetails>
+      </StyledAccordion>
 
       <FlashCardContainer>
         {flashCard ? (
@@ -189,7 +203,12 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const StyledAccordion = styled(Accordion)`
+  margin-bottom: 1rem;
+`;
+
 const StyledButton = styled(AppButton)`
+  margin-top: 1rem;
   height: 6vh;
   border-radius: 0 !important;
 `;
