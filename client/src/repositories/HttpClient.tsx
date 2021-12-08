@@ -15,4 +15,34 @@ instance.interceptors.request.use((config: any) => {
   return config;
 });
 
+export function addBeforeRequestAction(callback: (arg: any) => void) {
+  instance.interceptors.request.use(
+    (config) => {
+      callback(config);
+
+      return config;
+    },
+    (error) => {
+      callback(error);
+
+      return Promise.reject(error);
+    }
+  );
+}
+
+export function addAfterRequestAction(callback: (arg: any) => void) {
+  instance.interceptors.response.use(
+    (response) => {
+      callback(response);
+
+      return response;
+    },
+    (error) => {
+      callback(error);
+
+      return Promise.reject(error);
+    }
+  );
+}
+
 export default instance;

@@ -133,6 +133,7 @@ function FlashCardsPage() {
   };
 
   const emptyState = () => {
+    // TODO: add button to reset the game after finish
     return (
       <EmptyStateMessage>
         {viewedCardIds.length ? 'There are not more cards' : 'No cards found'}
@@ -204,35 +205,19 @@ const Container = styled.div`
 `;
 
 const StyledAccordion = styled(Accordion)`
-  margin-bottom: 1rem;
+  margin-bottom: 0 !important;
 `;
 
 const StyledButton = styled(AppButton)`
-  margin-top: 1rem;
   height: 6vh;
   border-radius: 0 !important;
-`;
-
-const StyledPaper = styled(AppPaper)`
-  padding-top: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 0 !important;
-`;
-
-const PaperTitle = styled.span`
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.8 em;
-  font-weight: bold;
-  text-transform: uppercase;
 `;
 
 const FlashCardContainer = styled.div`
   flex-grow: 2;
   display: flex;
   align-items: center;
+  padding: 1rem 0;
 `;
 
 const EmptyStateMessage = styled.div`
