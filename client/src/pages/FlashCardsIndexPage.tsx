@@ -149,9 +149,7 @@ function FlashCardsIndexPage() {
 
   const hasCards = !!flashCards.length;
 
-  // TODO: display category to identify easily cards without category
   // TODO: Add a "no category" filter
-  // TODO: Add margin to create button
   // TODO: Custom order for this page
 
   return (

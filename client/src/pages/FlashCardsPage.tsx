@@ -146,7 +146,6 @@ function FlashCardsPage() {
   };
 
   const emptyState = () => {
-    // TODO: add button to reset the game after finish
     return (
       <EmptyStateMessage>
         {viewedCardIds.length ? (

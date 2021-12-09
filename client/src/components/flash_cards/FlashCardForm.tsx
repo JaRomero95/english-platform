@@ -35,9 +35,6 @@ function FlashCardCreate(props: Props) {
     question_img_url: flashCard.answer_img_url,
   } as any;
 
-  // TODO: Separate fields to easy go to target text/img field without confusions cause both are text fields
-  // TODO: Change flash card style to show both faces at the same time
-
   return (
     <form onSubmit={handleSubmit}>
       <SectionTitle>Select a category</SectionTitle>
