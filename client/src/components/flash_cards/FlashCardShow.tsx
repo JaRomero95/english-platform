@@ -16,7 +16,10 @@ interface Props {
 }
 
 function fillAvailableSquareSpace(domElement: HTMLDivElement) {
-  const parentElement = domElement!.parentElement!;
+  const parentElement = domElement!.parentElement;
+
+  if (!parentElement) return;
+
   const availableWidth = parentElement.clientWidth;
   const availableHeight = parentElement.clientHeight;
   const limitedSpace =
