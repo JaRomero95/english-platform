@@ -2,6 +2,7 @@ import {useState, useEffect, useMemo} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {Add as AddIcon} from '@mui/icons-material';
+import {CircularProgress} from '@mui/material';
 import FlashCard from 'models/FlashCard';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
@@ -41,6 +42,8 @@ const getNumberParam = (
 
 function FlashCardsIndexPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [lastRequest, setLastRequest] = useState<NodeJS.Timeout | null>(null);
+  const [loading, setLoading] = useState(false);
   const [flashCardToEdit, setFlashCardToEdit] = useState<FlashCard | null>(
     null
   );
@@ -97,10 +100,16 @@ function FlashCardsIndexPage() {
   };
 
   const getFlashCards = async () => {
-    const {data, meta} = await flashCardsRepository.index(getFlashCardParams());
+    setLoading(true);
+
+    const {data, meta} = await flashCardsRepository.index(
+      getFlashCardParams(),
+      {skipLoading: true}
+    );
 
     setTotalPages(calcTotalPages(meta.total_elements));
     setFlashCards(data);
+    setLoading(false);
   };
 
   const getFlashCardCategories = async () => {
@@ -129,8 +138,16 @@ function FlashCardsIndexPage() {
   }, []);
 
   useEffect(() => {
-    getFlashCards();
+    clearTimeout(lastRequest!);
+
+    const timeoutReference = setTimeout(() => {
+      getFlashCards();
+    }, 500);
+
+    setLastRequest(timeoutReference);
   }, [searchParams, page, perPage]);
+
+  const hasCards = !!flashCards.length;
 
   // TODO: display category to identify easily cards without category
   // TODO: Add a "no category" filter
@@ -152,25 +169,42 @@ function FlashCardsIndexPage() {
         Create Flash Card
       </CreateButton>
 
-      <FlashCardsContainer>
-        {flashCards.map((flashCard) => {
-          const category = indexedCategories[flashCard.flash_card_category_id!];
+      {loading && (
+        <LoadingContainer>
+          <CircularProgress />
+        </LoadingContainer>
+      )}
 
-          return (
-            <RowWrapper
-              onClick={() => setFlashCardToEdit(flashCard)}
-              key={flashCard.id}
-            >
-              <FlashCardAdminItem
-                flashCard={flashCard}
-                flashCardCategory={category}
-              />
-            </RowWrapper>
-          );
-        })}
-      </FlashCardsContainer>
+      {!loading && !hasCards && <p>No cards found</p>}
 
-      <AppPagination page={page} totalPages={totalPages} onChange={setPage} />
+      {!loading && hasCards && (
+        <>
+          <FlashCardsContainer>
+            {flashCards.map((flashCard) => {
+              const category =
+                indexedCategories[flashCard.flash_card_category_id!];
+
+              return (
+                <RowWrapper
+                  onClick={() => setFlashCardToEdit(flashCard)}
+                  key={flashCard.id}
+                >
+                  <FlashCardAdminItem
+                    flashCard={flashCard}
+                    flashCardCategory={category}
+                  />
+                </RowWrapper>
+              );
+            })}
+          </FlashCardsContainer>
+
+          <AppPagination
+            page={page}
+            totalPages={totalPages}
+            onChange={setPage}
+          />
+        </>
+      )}
 
       <FlashCardCreate
         open={showCreateDialog}
@@ -204,6 +238,12 @@ const RowWrapper = styled.div`
 
 const CreateButton = styled(AppButton)`
   margin-top: 1rem;
+`;
+
+const LoadingContainer = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 `;
 
 export default FlashCardsIndexPage;
