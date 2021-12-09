@@ -78,7 +78,7 @@ function FlashCardsPage() {
   const needMoreFlashCards = (): boolean => {
     if (finished) return false;
 
-    const limitToRequestMore = flashCards.length - 2;
+    const limitToRequestMore = flashCards.length - 1;
 
     return currentFlashCardIndex >= limitToRequestMore;
   };

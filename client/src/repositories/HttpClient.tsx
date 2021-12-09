@@ -1,10 +1,13 @@
 import axios from 'axios';
 
+// TODO: remove token on 401 status code
+
 const baseURL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000/';
 
 const instance = axios.create({baseURL});
 
 instance.interceptors.request.use((config: any) => {
+  // TODO: connect this interceptor with the UserStore to get the token
   // FIXME: extract a module with localStorage access to avoid repeat this code present in UserStoreContext
   const token = localStorage.getItem('user-token');
 

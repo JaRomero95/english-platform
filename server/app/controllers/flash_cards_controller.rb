@@ -2,9 +2,14 @@ class FlashCardsController < ApplicationController
   before_action :authenticate!
 
   def index
+    arel = FlashCard.arel_table
+
     criteria = FlashCard.filter(filter_params)
                         .where(user: current_user)
-                        .order(last_answer_datetime: :asc, created_at: :desc)
+                        .order(
+                          arel[:last_answer_datetime].asc.nulls_first,
+                          arel[:created_at].desc
+                        )
 
     flash_cards = paginate(criteria)
 
