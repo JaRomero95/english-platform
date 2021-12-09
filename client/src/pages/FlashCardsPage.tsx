@@ -74,7 +74,7 @@ function FlashCardsPage() {
 
   useEffect(() => {
     if (needMoreFlashCards()) getFlashCards();
-  }, [currentFlashCardIndex]);
+  }, [currentFlashCardIndex, categoryIds]);
 
   const needMoreFlashCards = (): boolean => {
     if (finished) return false;
