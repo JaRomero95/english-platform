@@ -1,5 +1,5 @@
 # ssh ubuntu@217.182.68.221
-cd english-platform
+# cd english-platform
 git pull
 sudo docker-compose stop web
 sudo docker-compose up -d web
