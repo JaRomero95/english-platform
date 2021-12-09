@@ -23,6 +23,7 @@ const categoriesRepository = new FlashCardCategoriesRepository();
 
 function FlashCardsPage() {
   const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
+  const [loadingCards, setLoadingCards] = useState(false);
   const [viewedCardIds, setViewedCardIds] = useState<number[]>([]);
   const [flashCardCategories, setFlashCardCategories] = useState<
     FlashCardCategory[]
@@ -78,12 +79,16 @@ function FlashCardsPage() {
   const needMoreFlashCards = (): boolean => {
     if (finished) return false;
 
-    const limitToRequestMore = flashCards.length - 1;
+    const limitToRequestMore = flashCards.length - 4;
 
     return currentFlashCardIndex >= limitToRequestMore;
   };
 
   const getFlashCards = async () => {
+    if (loadingCards) return;
+
+    setLoadingCards(true);
+
     const params: {[key: string]: any} = {per_page: 10};
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;
@@ -97,6 +102,8 @@ function FlashCardsPage() {
     setFlashCards([...flashCards, ...cardsToAdd]);
     setViewedCardIds([...viewedCardIds, ...cardsToAdd.map((c) => c.id!)]);
     setFinished(!cardsToAdd.length);
+
+    setLoadingCards(false);
   };
 
   const getFlashCardCategories = async () => {
