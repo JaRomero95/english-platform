@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import {Save as SaveIcon} from '@mui/icons-material';
+import {Save as SaveIcon, Image as ImageIcon} from '@mui/icons-material';
 import FlashCard from 'models/FlashCard';
 import AppInput from 'components/AppInput';
 import AppButton from 'components/AppButton';
@@ -30,11 +30,18 @@ function FlashCardCreate(props: Props) {
     onSubmit(flashCard);
   };
 
+  const reverseFlashCard: FlashCard = {
+    question_text: flashCard.answer_text,
+    question_img_url: flashCard.answer_img_url,
+  } as any;
+
   // TODO: Separate fields to easy go to target text/img field without confusions cause both are text fields
   // TODO: Change flash card style to show both faces at the same time
 
   return (
     <form onSubmit={handleSubmit}>
+      <SectionTitle>Select a category</SectionTitle>
+
       <FlashCardCategorySelect
         flashCardCategories={flashCardCategories}
         multiple={false}
@@ -44,31 +51,47 @@ function FlashCardCreate(props: Props) {
         }
       />
 
-      <AppInput
+      <SectionTitle>Question</SectionTitle>
+
+      <StyledInput
         value={flashCard.question_text}
-        placeholder={'Question Text'}
+        placeholder={'Question text'}
         onChange={(value: string) => onFieldChange('question_text', value)}
       />
 
-      <AppInput
+      <StyledInput
         value={flashCard.question_img_url}
-        placeholder={'Question Img Url'}
+        placeholder={'Question image url'}
+        startIcon={<ImageIcon />}
         onChange={(value: string) => onFieldChange('question_img_url', value)}
       />
 
-      <AppInput
+      <SectionTitle>Answer</SectionTitle>
+
+      <StyledInput
         value={flashCard.answer_text}
-        placeholder={'Answer Text'}
+        placeholder={'Answer text'}
         onChange={(value: string) => onFieldChange('answer_text', value)}
       />
 
-      <AppInput
+      <StyledInput
         value={flashCard.answer_img_url}
-        placeholder={'Answer Img Url'}
+        placeholder={'Answer image url'}
+        startIcon={<ImageIcon />}
         onChange={(value: string) => onFieldChange('answer_img_url', value)}
       />
 
-      <FlashCardShow flashCard={flashCard} />
+      <SectionTitle>Preview</SectionTitle>
+
+      <FlashCardContainer>
+        <div>
+          <FlashCardShow flashCard={flashCard} flippable={false} />
+        </div>
+
+        <div>
+          <FlashCardShow flashCard={reverseFlashCard} flippable={false} />
+        </div>
+      </FlashCardContainer>
 
       <SaveButton type="submit" startIcon={<SaveIcon />} onClick={handleSubmit}>
         Save
@@ -77,8 +100,37 @@ function FlashCardCreate(props: Props) {
   );
 }
 
-const SaveButton = styled(AppButton)`
-  margin-top: 1rem;
+const StyledInput = styled(AppInput)`
+  margin-bottom: 1rem !important;
+`;
+
+const SaveButton = styled(AppButton)``;
+
+const SectionTitle = styled.p`
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9em;
+`;
+
+const FlashCardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    height: 220px;
+    width: 220px;
+  }
+
+  @media (min-width: 650px) {
+    flex-direction: row;
+
+    > div {
+      width: 300px;
+      height: 300px;
+    }
+  }
 `;
 
 export default FlashCardCreate;

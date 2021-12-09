@@ -1,32 +1,44 @@
 import React from 'react';
-import TextField from '@mui/material/TextField';
+import {TextField, InputAdornment} from '@mui/material';
 import styled from 'styled-components';
 
 interface Props {
   value: string;
   type?: 'text' | 'password';
   placeholder?: string;
+  className?: string;
+  startIcon?: JSX.Element;
   onChange: (value: string) => void;
 }
 
-class AppInput extends React.Component<Props> {
-  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    return this.props.onChange(event.target.value);
+function AppInput(props: Props) {
+  const {value, placeholder, className, startIcon, type = 'text'} = props;
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    return props.onChange(event.target.value);
   };
 
-  render() {
-    const {value, placeholder, type = 'text'} = this.props;
+  const additionalAttributes: {[key: string]: any} = {};
 
-    return (
-      <StyledTextField
-        label={placeholder}
-        onChange={this.onChange}
-        value={value}
-        type={type}
-        fullWidth
-      />
-    );
+  if (startIcon) {
+    additionalAttributes.InputProps = {
+      startAdornment: (
+        <InputAdornment position="start">{startIcon}</InputAdornment>
+      ),
+    };
   }
+
+  return (
+    <StyledTextField
+      className={className}
+      label={placeholder}
+      onChange={onChange}
+      value={value}
+      type={type}
+      fullWidth
+      {...additionalAttributes}
+    />
+  );
 }
 
 const StyledTextField = styled(TextField)`

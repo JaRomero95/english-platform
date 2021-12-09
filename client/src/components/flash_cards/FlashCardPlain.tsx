@@ -9,7 +9,6 @@ type FlashCardFace = {
 
 interface Props {
   flashCard: FlashCard;
-  flippable?: boolean;
   onFlip?: () => void;
 }
 
@@ -28,12 +27,10 @@ function fillAvailableSquareSpace(domElement: HTMLDivElement) {
 
 function FlashCardShow(props: Props) {
   const [flipped, setFlipped] = useState(false);
-  const {onFlip, flashCard, flippable = true} = props;
+  const {onFlip, flashCard} = props;
   const cardElement = useRef(null);
 
   const flipCard = () => {
-    if (!flippable) return;
-
     onFlip && onFlip();
 
     setFlipped(!flipped);
@@ -126,11 +123,9 @@ const CardImage = styled.img`
 `;
 
 const CardText = styled.span`
-  max-width: 100%;
   position: relative;
   display: inline-block;
   font-size: 2em;
-  word-wrap: break-word;
 
   &.alternative-text {
     color: white;
