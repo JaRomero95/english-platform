@@ -8,6 +8,7 @@ interface Props {
   endIcon?: JSX.Element;
   size?: 'small' | 'medium' | 'large';
   type?: 'button' | 'submit';
+  variant?: 'contained' | 'text';
   className?: string;
   children: any;
 }
@@ -20,13 +21,14 @@ function AppButton(props: Props) {
     startIcon,
     endIcon,
     className,
+    variant = 'contained',
     size = 'medium',
     type = 'button',
   } = props;
 
   return (
     <StyledButton
-      variant="contained"
+      variant={variant}
       disabled={disabled}
       startIcon={startIcon}
       endIcon={endIcon}

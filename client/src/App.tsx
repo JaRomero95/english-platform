@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppRoutes from 'router/AppRoutes';
 import AppLoading from 'components/AppLoading';
 import UserStoreContext from 'providers/UserStoreContext';
+import LoadingStoreContext from 'providers/LoadingStoreContext';
 import UserStore from 'store/UserStore';
 import LoadingStore from 'store/LoadingStore';
 
@@ -14,11 +15,13 @@ const App = observer(() => {
     <>
       <CssBaseline />
 
-      <AppLoading show={loadingStore.isLoading} />
-
       <UserStoreContext.Provider value={userStore}>
-        <AppRoutes />
+        <LoadingStoreContext.Provider value={loadingStore}>
+          <AppRoutes />
+        </LoadingStoreContext.Provider>
       </UserStoreContext.Provider>
+
+      <AppLoading show={loadingStore.isLoading} />
     </>
   );
 });

@@ -191,8 +191,13 @@ function FlashCardsPage() {
               key={flashCard.id}
               flashCard={flashCard}
               onFlip={onFlip}
-              onSettings={() => setShowEditModal(true)}
             />
+
+            <EditButtonContainer>
+              <EditButton variant="text" onClick={() => setShowEditModal(true)}>
+                Edit
+              </EditButton>
+            </EditButtonContainer>
 
             <FlashCardEdit
               open={showEditModal}
@@ -247,7 +252,8 @@ const StyledButton = styled(AppButton)`
 const FlashCardContainer = styled.div`
   flex-grow: 2;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   padding: 1rem 0;
 `;
 
@@ -262,6 +268,18 @@ const EmptyStateMessage = styled.div`
 const ResetButton = styled(AppButton)`
   width: 200px;
   margin-top: 1rem !important;
+`;
+
+const EditButtonContainer = styled.div`
+  padding-top: 1rem;
+  padding-left: 8%;
+  padding-right: 8%;
+  display: flex;
+  flex-direction: row-reverse;
+`;
+
+const EditButton = styled(AppButton)`
+  width: 100px;
 `;
 
 export default FlashCardsPage;

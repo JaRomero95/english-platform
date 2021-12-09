@@ -1,7 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
-import {IconButton} from '@mui/material';
-import {Settings as SettingsIcon} from '@mui/icons-material';
 import FlashCard from 'models/FlashCard';
 
 type FlashCardFace = {
@@ -12,7 +10,6 @@ type FlashCardFace = {
 interface Props {
   flashCard: FlashCard;
   onFlip?: () => void;
-  onSettings?: () => void;
 }
 
 function fillAvailableSquareSpace(domElement: HTMLDivElement) {
@@ -28,18 +25,13 @@ function fillAvailableSquareSpace(domElement: HTMLDivElement) {
 
 function FlashCardShow(props: Props) {
   const [flipped, setFlipped] = useState(false);
-  const {onFlip, flashCard, onSettings} = props;
+  const {onFlip, flashCard} = props;
   const cardElement = useRef(null);
 
   const flipCard = () => {
     onFlip && onFlip();
 
     setFlipped(!flipped);
-  };
-
-  const onSettingsClick = (event: React.SyntheticEvent) => {
-    event.stopPropagation();
-    onSettings!();
   };
 
   const renderCard = ({text, imgUrl}: FlashCardFace) => {
@@ -50,14 +42,6 @@ function FlashCardShow(props: Props) {
         {imgUrl && <CardImage src={imgUrl} />}
 
         {text && <CardText className={alternativeTextClass}>{text}</CardText>}
-
-        {onSettings && (
-          <SettingIconContainer>
-            <IconButton size="large" onClick={onSettingsClick}>
-              <SettingsIcon fontSize="inherit" />
-            </IconButton>
-          </SettingIconContainer>
-        )}
       </CardContainer>
     );
   };
@@ -146,22 +130,6 @@ const CardText = styled.span`
     background-color: rgba(0, 0, 0, 0.4);
     padding: 0 0.5rem;
     border-radius: 10px;
-  }
-`;
-
-const SettingIconContainer = styled.div`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-
-  > button {
-    background-color: #fff;
-    border-radius: 0;
-    border-bottom-right-radius: 10px;
-
-    &:hover {
-      background-color: #efefef;
-    }
   }
 `;
 

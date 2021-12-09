@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import {Save as SaveIcon} from '@mui/icons-material';
 import FlashCard from 'models/FlashCard';
@@ -25,12 +25,16 @@ function FlashCardCreate(props: Props) {
     });
   };
 
-  // TODO: Add submit functionality to save on enter
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    onSubmit(flashCard);
+  };
+
   // TODO: Separate fields to easy go to target text/img field without confusions cause both are text fields
   // TODO: Change flash card style to show both faces at the same time
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <FlashCardCategorySelect
         flashCardCategories={flashCardCategories}
         multiple={false}
@@ -66,10 +70,10 @@ function FlashCardCreate(props: Props) {
 
       <FlashCardShow flashCard={flashCard} />
 
-      <SaveButton startIcon={<SaveIcon />} onClick={() => onSubmit(flashCard)}>
+      <SaveButton type="submit" startIcon={<SaveIcon />} onClick={handleSubmit}>
         Save
       </SaveButton>
-    </div>
+    </form>
   );
 }
 

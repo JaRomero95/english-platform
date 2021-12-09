@@ -26,7 +26,7 @@ const LoadingContainer = styled.div`
   background-color: #fff;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
   justify-content: center;
