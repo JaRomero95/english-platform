@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -56,23 +57,36 @@ const AppNavigationDrawer = observer((props: Props) => {
   return (
     <Drawer anchor="left" open={open} onClose={onClose}>
       <Box sx={{width: 300}} onClick={onClose}>
-        {renderLinks(upperLinks)}
+        <ItemsContainer>
+          <div>
+            {renderLinks(upperLinks)}
 
-        <Divider />
+            <Divider />
 
-        {renderLinks(bottomLinks)}
+            {renderLinks(bottomLinks)}
+          </div>
 
-        <Divider />
+          <div>
+            <Divider />
 
-        <ListItem button onClick={() => userStore!.setToken(null)}>
-          <ListItemIcon>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText primary="Logout" />
-        </ListItem>
+            <ListItem button onClick={() => userStore!.setToken(null)}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
+          </div>
+        </ItemsContainer>
       </Box>
     </Drawer>
   );
 });
+
+const ItemsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+`;
 
 export default AppNavigationDrawer;
