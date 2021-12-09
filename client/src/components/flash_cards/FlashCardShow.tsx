@@ -16,10 +16,7 @@ interface Props {
 }
 
 function fillAvailableSquareSpace(domElement: HTMLDivElement) {
-  const parentElement = domElement!.parentElement;
-
-  if (!parentElement) return;
-
+  const parentElement = domElement!.parentElement!;
   const availableWidth = parentElement.clientWidth;
   const availableHeight = parentElement.clientHeight;
   const limitedSpace =
@@ -121,6 +118,7 @@ const CardContainer = styled.div`
   user-select: none;
   backface-visibility: hidden;
   perspective: 1000px;
+  overflow: hidden;
 
   &:last-child {
     transform: rotateY(180deg);
@@ -153,8 +151,18 @@ const CardText = styled.span`
 
 const SettingIconContainer = styled.div`
   position: absolute;
-  left: 5px;
-  top: 5px;
+  left: 0px;
+  top: 0px;
+
+  > button {
+    background-color: #fff;
+    border-radius: 0;
+    border-bottom-right-radius: 10px;
+
+    &:hover {
+      background-color: #efefef;
+    }
+  }
 `;
 
 export default FlashCardShow;
