@@ -145,6 +145,16 @@ function FlashCardsPage() {
     reset();
   };
 
+  const onFlashCardUpdated = (updatedFlashCard: FlashCard) => {
+    setFlashCards(
+      flashCards.map((flashCard) => {
+        return flashCard.id === updatedFlashCard.id
+          ? updatedFlashCard
+          : flashCard;
+      })
+    );
+  };
+
   const emptyState = () => {
     return (
       <EmptyStateMessage>
@@ -203,6 +213,7 @@ function FlashCardsPage() {
               flashCard={flashCard}
               flashCardCategories={flashCardCategories}
               onClose={() => setShowEditModal(false)}
+              onUpdate={onFlashCardUpdated}
             />
           </>
         ) : (

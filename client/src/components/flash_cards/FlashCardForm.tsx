@@ -1,9 +1,15 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import {Save as SaveIcon, Image as ImageIcon} from '@mui/icons-material';
+import {
+  Save as SaveIcon,
+  Image as ImageIcon,
+  TextFormat as TextFormatIcon,
+} from '@mui/icons-material';
+import {Divider} from '@mui/material';
 import FlashCard from 'models/FlashCard';
 import AppInput from 'components/AppInput';
 import AppButton from 'components/AppButton';
+import AppSlider from 'components/AppSlider';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
 import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
 import FlashCardCategory from 'models/FlashCardCategory';
@@ -12,6 +18,10 @@ interface Props {
   flashCard: FlashCard;
   flashCardCategories: FlashCardCategory[];
   onSubmit: (flashCard: FlashCard) => void;
+}
+
+function formatSliderText(value: number) {
+  return `${value}%`;
 }
 
 function FlashCardCreate(props: Props) {
@@ -33,6 +43,7 @@ function FlashCardCreate(props: Props) {
   const reverseFlashCard: FlashCard = {
     question_text: flashCard.answer_text,
     question_img_url: flashCard.answer_img_url,
+    question_font_scale_percent: flashCard.answer_font_scale_percent,
   } as any;
 
   return (
@@ -48,12 +59,16 @@ function FlashCardCreate(props: Props) {
         }
       />
 
+      <Divider />
+
       <SectionTitle>Question</SectionTitle>
 
       <StyledInput
         value={flashCard.question_text}
         placeholder={'Question text'}
         onChange={(value: string) => onFieldChange('question_text', value)}
+        maxLength={500}
+        textarea
       />
 
       <StyledInput
@@ -63,12 +78,27 @@ function FlashCardCreate(props: Props) {
         onChange={(value: string) => onFieldChange('question_img_url', value)}
       />
 
+      <StyledSlider
+        value={flashCard.question_font_scale_percent}
+        valueLabelFormat={formatSliderText}
+        step={5}
+        startIcon={<TextFormatIcon fontSize="small" />}
+        endIcon={<TextFormatIcon fontSize="large" />}
+        onChange={(value: number) =>
+          onFieldChange('question_font_scale_percent', value)
+        }
+      />
+
+      <Divider />
+
       <SectionTitle>Answer</SectionTitle>
 
       <StyledInput
         value={flashCard.answer_text}
         placeholder={'Answer text'}
         onChange={(value: string) => onFieldChange('answer_text', value)}
+        maxLength={500}
+        textarea
       />
 
       <StyledInput
@@ -77,6 +107,19 @@ function FlashCardCreate(props: Props) {
         startIcon={<ImageIcon />}
         onChange={(value: string) => onFieldChange('answer_img_url', value)}
       />
+
+      <StyledSlider
+        value={flashCard.answer_font_scale_percent}
+        valueLabelFormat={formatSliderText}
+        step={5}
+        startIcon={<TextFormatIcon fontSize="small" />}
+        endIcon={<TextFormatIcon fontSize="large" />}
+        onChange={(value: number) =>
+          onFieldChange('answer_font_scale_percent', value)
+        }
+      />
+
+      <Divider />
 
       <SectionTitle>Preview</SectionTitle>
 
@@ -90,9 +133,9 @@ function FlashCardCreate(props: Props) {
         </div>
       </FlashCardContainer>
 
-      <SaveButton type="submit" startIcon={<SaveIcon />} onClick={handleSubmit}>
+      <AppButton type="submit" startIcon={<SaveIcon />} onClick={handleSubmit}>
         Save
-      </SaveButton>
+      </AppButton>
     </form>
   );
 }
@@ -101,12 +144,16 @@ const StyledInput = styled(AppInput)`
   margin-bottom: 1rem !important;
 `;
 
-const SaveButton = styled(AppButton)``;
+const StyledSlider = styled(AppSlider)`
+  margin-bottom: 1rem;
+`;
 
 const SectionTitle = styled.p`
   text-transform: uppercase;
   font-weight: bold;
+  text-align: center;
   font-size: 0.9em;
+  margin-bottom: 1rem;
 `;
 
 const FlashCardContainer = styled.div`

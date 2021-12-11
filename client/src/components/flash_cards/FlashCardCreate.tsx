@@ -15,8 +15,10 @@ const repository = new FlashCardsRepository();
 const flashCard: FlashCard = {
   question_text: '',
   question_img_url: '',
+  question_font_scale_percent: 50,
   answer_text: '',
   answer_img_url: '',
+  answer_font_scale_percent: 50,
   flash_card_category_id: null,
 };
 

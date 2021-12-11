@@ -51,8 +51,10 @@ class FlashCardsController < ApplicationController
     params.require(:data).permit(
       :question_text,
       :question_img_url,
+      :question_font_scale_percent,
       :answer_text,
       :answer_img_url,
+      :answer_font_scale_percent,
       :flash_card_category_id
     )
   end
@@ -61,8 +63,10 @@ class FlashCardsController < ApplicationController
     params.require(:data).permit(
       :question_text,
       :question_img_url,
+      :question_font_scale_percent,
       :answer_text,
       :answer_img_url,
+      :answer_font_scale_percent,
       :flash_card_category_id,
       :last_answer_datetime
     )

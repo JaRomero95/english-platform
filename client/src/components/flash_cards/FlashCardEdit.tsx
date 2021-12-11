@@ -8,33 +8,38 @@ import LoadingStoreContext from 'providers/LoadingStoreContext';
 
 interface Props {
   open: boolean;
-  onClose: () => void;
   flashCard: FlashCard;
   flashCardCategories: FlashCardCategory[];
+  onUpdate?: (flashCard: FlashCard) => void;
+  onClose: () => void;
 }
 
 const repository = new FlashCardsRepository();
 
 function FlashCardEdit(props: Props) {
+  const {open, flashCard, flashCardCategories, onClose, onUpdate} = props;
+
   const loadingStore = React.useContext(LoadingStoreContext);
 
   const onUpdateFlashCard = async (flashCard: FlashCard) => {
     // FIXME: additional loading to avoid screen jumps
     loadingStore!.incrementLoading();
 
-    await repository.update(flashCard.id!, flashCard);
+    const updatedFlashCard = await repository.update(flashCard.id!, flashCard);
 
-    props.onClose();
+    if (onUpdate) onUpdate(updatedFlashCard);
+
+    onClose();
 
     // FIXME: remove additional loading with a small delay to prevent screen jump
     setTimeout(() => loadingStore!.decrementLoading(), 200);
   };
 
   return (
-    <AppFullScreenDialog {...props} title="Edit Flash Card">
+    <AppFullScreenDialog open={open} onClose={onClose} title="Edit Flash Card">
       <FlashCardForm
-        flashCard={props.flashCard}
-        flashCardCategories={props.flashCardCategories}
+        flashCard={flashCard}
+        flashCardCategories={flashCardCategories}
         onSubmit={onUpdateFlashCard}
       />
     </AppFullScreenDialog>

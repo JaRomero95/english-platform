@@ -2,34 +2,59 @@ import React, {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
 import FlashCard from 'models/FlashCard';
 
-type FlashCardFace = {
-  text: string | null;
-  imgUrl: string | null;
-};
-
 interface Props {
   flashCard: FlashCard;
   flippable?: boolean;
   onFlip?: () => void;
 }
 
-function fillAvailableSquareSpace(domElement: HTMLDivElement) {
-  if (!domElement) return;
+function calcFontSize(width: number, fontScalePercent: number) {
+  const maxScaleFactor = 28;
 
-  const parentElement = domElement.parentElement!;
-  const availableWidth = parentElement.clientWidth;
-  const availableHeight = parentElement.clientHeight;
-  const limitedSpace =
-    availableWidth < availableHeight ? availableWidth : availableHeight;
-  const dimension = `${limitedSpace * 0.85}px`;
-  domElement.style.width = dimension;
-  domElement.style.height = dimension;
+  const scaleFactor = (maxScaleFactor / 100) * fontScalePercent;
+
+  const minDivisor = 5;
+  const maxDivisor = maxScaleFactor + minDivisor;
+
+  const divisor = maxDivisor - scaleFactor;
+
+  if (isNaN(width / divisor)) {
+    console.log(width);
+    console.log(fontScalePercent);
+    console.log(width / divisor);
+  }
+
+  return width / divisor;
 }
 
 function FlashCardShow(props: Props) {
+  const [width, setWidth] = useState(0);
+  const [questionTimeout, setQuestionTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+  const [answerTimeout, setAnswerTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+  const [questionFontSize, setQuestionFontSize] = useState(10);
+  const [answerFontSize, setAnswerFontSize] = useState(10);
   const [flipped, setFlipped] = useState(false);
   const {onFlip, flashCard, flippable = true} = props;
   const cardElement = useRef(null);
+
+  const fillAvailableSquareSpace = (domElement: HTMLDivElement) => {
+    if (!domElement) return;
+
+    const parentElement = domElement.parentElement!;
+    const availableWidth = parentElement.clientWidth;
+    const availableHeight = parentElement.clientHeight;
+    const limitedSpace =
+      availableWidth < availableHeight ? availableWidth : availableHeight;
+    const dimension = limitedSpace * 0.85;
+    const styleDimension = `${dimension}px`;
+    domElement.style.width = styleDimension;
+    domElement.style.height = styleDimension;
+    setWidth(dimension);
+  };
 
   const flipCard = () => {
     if (!flippable) return;
@@ -39,14 +64,51 @@ function FlashCardShow(props: Props) {
     setFlipped(!flipped);
   };
 
-  const renderCard = ({text, imgUrl}: FlashCardFace) => {
-    const alternativeTextClass = imgUrl ? 'alternative-text' : '';
+  useEffect(() => {
+    clearTimeout(questionTimeout!);
+
+    const timeout = setTimeout(() => {
+      const fontSize = calcFontSize(
+        width,
+        flashCard.question_font_scale_percent
+      );
+
+      setQuestionFontSize(fontSize);
+    }, 200);
+
+    setQuestionTimeout(timeout);
+  }, [width, flashCard.question_font_scale_percent]);
+
+  useEffect(() => {
+    clearTimeout(answerTimeout!);
+
+    const timeout = setTimeout(() => {
+      const fontSize = calcFontSize(width, flashCard.answer_font_scale_percent);
+
+      setAnswerFontSize(fontSize);
+    }, 200);
+
+    setAnswerTimeout(timeout);
+  }, [width, flashCard.answer_font_scale_percent]);
+
+  const renderCard = ({
+    text,
+    imgUrl,
+    fontSize,
+  }: {
+    text: string | null;
+    imgUrl: string | null;
+    fontSize: number;
+  }) => {
+    const needOverlay: boolean = !!text && !!imgUrl;
 
     return (
       <CardContainer onClick={flipCard}>
         {imgUrl && <CardImage src={imgUrl} />}
 
-        {text && <CardText className={alternativeTextClass}>{text}</CardText>}
+        {needOverlay && <Overlay />}
+
+        {text && <CardText style={{fontSize}}>{text}</CardText>}
       </CardContainer>
     );
   };
@@ -66,11 +128,13 @@ function FlashCardShow(props: Props) {
       {renderCard({
         text: flashCard.question_text,
         imgUrl: flashCard.question_img_url,
+        fontSize: questionFontSize,
       })}
 
       {renderCard({
         text: flashCard.answer_text,
         imgUrl: flashCard.answer_img_url,
+        fontSize: answerFontSize,
       })}
     </FlipCardContainer>
   );
@@ -99,7 +163,7 @@ const CardContainer = styled.div`
   box-shadow: 5px 5px 5px #aaa;
   border-radius: 10px;
   text-align: center;
-  padding: 1rem;
+  padding: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,19 +189,28 @@ const CardImage = styled.img`
   border-radius: 10px;
 `;
 
-const CardText = styled.span`
-  max-width: 100%;
+const Overlay = styled.div`
+  display: block;
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  top: 5%;
+  left: 5%;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+
+  & + * {
+    padding: 0.3em;
+  }
+`;
+
+const CardText = styled.pre`
+  font-family: inherit;
+  width: 100%;
   position: relative;
   display: inline-block;
-  font-size: 2em;
   word-wrap: break-word;
-
-  &.alternative-text {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 0 0.5rem;
-    border-radius: 10px;
-  }
+  white-space: pre-wrap;
 `;
 
 export default FlashCardShow;
