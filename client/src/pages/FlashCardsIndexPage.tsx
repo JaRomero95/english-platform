@@ -7,7 +7,7 @@ import FlashCard from 'models/FlashCard';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
 import FlashCardCategory from 'models/FlashCardCategory';
-import FlashCardAdminItem from 'components/flash_cards/FlashCardAdminItem';
+import FlashCardShow from 'components/flash_cards/FlashCardShow';
 import FlashCardFilters from 'components/flash_cards/FlashCardFilters';
 import FlashCardCreate from 'components/flash_cards/FlashCardCreate';
 import FlashCardEdit from 'components/flash_cards/FlashCardEdit';
@@ -54,7 +54,7 @@ function FlashCardsIndexPage() {
     FlashCardCategory[]
   >([]);
 
-  const perPage = getNumberParam(searchParams, 'per_page', 12);
+  const perPage = getNumberParam(searchParams, 'per_page', 24);
   const page = getNumberParam(searchParams, 'page', 1);
 
   const indexedCategories = useMemo(() => {
@@ -182,16 +182,34 @@ function FlashCardsIndexPage() {
               const category =
                 indexedCategories[flashCard.flash_card_category_id!];
 
+              const reverseFlashCard: FlashCard = {
+                question_text: flashCard.answer_text,
+                question_img_url: flashCard.answer_img_url,
+                question_font_scale_percent:
+                  flashCard.answer_font_scale_percent,
+              } as any;
+
               return (
-                <RowWrapper
+                <FlashCardContainer
                   onClick={() => setFlashCardToEdit(flashCard)}
                   key={flashCard.id}
                 >
-                  <FlashCardAdminItem
-                    flashCard={flashCard}
-                    flashCardCategory={category}
-                  />
-                </RowWrapper>
+                  <div>
+                    <FlashCardShow
+                      flashCard={flashCard}
+                      flippable={false}
+                      fillAvailableSpace={false}
+                    />
+                  </div>
+
+                  <div>
+                    <FlashCardShow
+                      flashCard={reverseFlashCard}
+                      flippable={false}
+                      fillAvailableSpace={false}
+                    />
+                  </div>
+                </FlashCardContainer>
               );
             })}
           </FlashCardsContainer>
@@ -230,8 +248,25 @@ const FlashCardsContainer = styled.div`
   gap: 10px;
 `;
 
-const RowWrapper = styled.div`
+const FlashCardContainer = styled.div`
   cursor: pointer;
+  display: flex;
+
+  > div > div {
+    height: 150px;
+    width: 150px;
+  }
+
+  > div:first-child > div > div {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right: 0;
+  }
+
+  > div:last-child > div > div {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
 `;
 
 const CreateButton = styled(AppButton)`

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_11_175749) do
+ActiveRecord::Schema.define(version: 2021_12_11_201843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 2021_12_11_175749) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "flash_card_category_id"
     t.datetime "last_answer_datetime"
-    t.integer "question_font_scale_percent", default: 50
-    t.integer "answer_font_scale_percent", default: 50
+    t.integer "question_font_scale_percent", default: 85
+    t.integer "answer_font_scale_percent", default: 85
     t.index ["flash_card_category_id"], name: "index_flash_cards_on_flash_card_category_id"
     t.index ["user_id"], name: "index_flash_cards_on_user_id"
   end
