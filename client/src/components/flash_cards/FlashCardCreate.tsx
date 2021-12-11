@@ -16,10 +16,10 @@ const flashCard: FlashCard = {
   visible: true,
   question_text: '',
   question_img_url: '',
-  question_font_scale_percent: 50,
+  question_font_scale_percent: 85,
   answer_text: '',
   answer_img_url: '',
-  answer_font_scale_percent: 50,
+  answer_font_scale_percent: 85,
   flash_card_category_id: null,
 };
 
