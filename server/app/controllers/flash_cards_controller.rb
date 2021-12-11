@@ -44,23 +44,20 @@ class FlashCardsController < ApplicationController
   private
 
   def filter_params
-    params.permit(:question_text, :answer_text, flash_card_category_ids: [])
+    params.permit(:visible, :question_text, :answer_text, flash_card_category_ids: [])
   end
 
   def create_params
-    params.require(:data).permit(
-      :question_text,
-      :question_img_url,
-      :question_font_scale_percent,
-      :answer_text,
-      :answer_img_url,
-      :answer_font_scale_percent,
-      :flash_card_category_id
-    )
+    editable_params
   end
 
   def update_params
+    editable_params
+  end
+
+  def editable_params
     params.require(:data).permit(
+      :visible,
       :question_text,
       :question_img_url,
       :question_font_scale_percent,

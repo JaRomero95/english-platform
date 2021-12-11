@@ -13,6 +13,7 @@ interface Props {
 const repository = new FlashCardsRepository();
 
 const flashCard: FlashCard = {
+  visible: true,
   question_text: '',
   question_img_url: '',
   question_font_scale_percent: 50,

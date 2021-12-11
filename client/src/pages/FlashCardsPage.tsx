@@ -89,7 +89,10 @@ function FlashCardsPage() {
 
     setLoadingCards(true);
 
-    const params: {[key: string]: any} = {per_page: 10};
+    const params: {[key: string]: any} = {
+      per_page: 10,
+      visible: true,
+    };
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;
 

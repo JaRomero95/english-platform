@@ -30,8 +30,8 @@ function FlashCardShow(props: Props) {
   const [answerTimeout, setAnswerTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
-  const [questionFontSize, setQuestionFontSize] = useState(10);
-  const [answerFontSize, setAnswerFontSize] = useState(10);
+  const [questionFontSize, setQuestionFontSize] = useState(13.8);
+  const [answerFontSize, setAnswerFontSize] = useState(13.8);
   const [flipped, setFlipped] = useState(false);
 
   const {

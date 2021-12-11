@@ -1,5 +1,6 @@
 export default interface FlashCard {
   id?: number;
+  visible: boolean;
   question_text: string;
   question_img_url: string;
   question_font_scale_percent: number;

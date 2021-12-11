@@ -10,6 +10,7 @@ import FlashCard from 'models/FlashCard';
 import AppInput from 'components/AppInput';
 import AppButton from 'components/AppButton';
 import AppSlider from 'components/AppSlider';
+import AppCheckbox from 'components/AppCheckbox';
 import FlashCardShow from 'components/flash_cards/FlashCardShow';
 import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
 import FlashCardCategory from 'models/FlashCardCategory';
@@ -58,6 +59,18 @@ function FlashCardCreate(props: Props) {
           onFieldChange('flash_card_category_id', selected)
         }
       />
+
+      <Divider />
+
+      <SectionTitle>Visible</SectionTitle>
+
+      <Row>
+        <AppCheckbox
+          value={flashCard.visible}
+          onChange={(visible) => onFieldChange('visible', visible)}
+        />
+        {flashCard.visible ? 'Playable Card' : 'No playable card'}
+      </Row>
 
       <Divider />
 
@@ -146,6 +159,11 @@ const StyledInput = styled(AppInput)`
 
 const StyledSlider = styled(AppSlider)`
   margin-bottom: 1rem;
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const SectionTitle = styled.p`
