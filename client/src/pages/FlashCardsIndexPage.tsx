@@ -179,7 +179,7 @@ function FlashCardsIndexPage() {
         <>
           <FlashCardsContainer>
             {flashCards.map((flashCard) => {
-              const category =
+              const flashCardCategory =
                 indexedCategories[flashCard.flash_card_category_id!];
 
               const reverseFlashCard: FlashCard = {
@@ -194,7 +194,7 @@ function FlashCardsIndexPage() {
                   onClick={() => setFlashCardToEdit(flashCard)}
                   key={flashCard.id}
                 >
-                  <div>
+                  <div className="fronface">
                     <FlashCardShow
                       flashCard={flashCard}
                       flippable={false}
@@ -202,13 +202,19 @@ function FlashCardsIndexPage() {
                     />
                   </div>
 
-                  <div>
+                  <div className="backface">
                     <FlashCardShow
                       flashCard={reverseFlashCard}
                       flippable={false}
                       fillAvailableSpace={false}
                     />
                   </div>
+
+                  {flashCardCategory && (
+                    <CategoryName>
+                      <div>{flashCardCategory.name}</div>
+                    </CategoryName>
+                  )}
                 </FlashCardContainer>
               );
             })}
@@ -249,23 +255,48 @@ const FlashCardsContainer = styled.div`
 `;
 
 const FlashCardContainer = styled.div`
+  position: relative;
+  overflow: hidden;
   cursor: pointer;
   display: flex;
 
   > div > div {
     height: 150px;
     width: 150px;
+
+    > div {
+      box-shadow: none !important;
+    }
   }
 
-  > div:first-child > div > div {
+  > .fronface > div > div {
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     border-right: 0;
   }
 
-  > div:last-child > div > div {
+  > .backface > div > div {
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
+  }
+`;
+
+const CategoryName = styled.div`
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 20px;
+
+  > * {
+    display: inline-block;
+    font-size: 0.7em;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0 0.3rem;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
   }
 `;
 
