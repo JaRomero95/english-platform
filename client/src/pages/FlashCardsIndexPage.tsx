@@ -86,6 +86,8 @@ function FlashCardsIndexPage() {
     const params: {[name: string]: string | number | Array<number>} = {
       per_page: perPage,
       page,
+      order_field: 'updated_at',
+      order_dir: 'asc',
     };
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;

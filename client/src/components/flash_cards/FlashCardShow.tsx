@@ -1,6 +1,7 @@
 import {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
 import FlashCard from 'models/FlashCard';
+import {CircularProgress} from '@mui/material';
 
 interface Props {
   flashCard: FlashCard;
@@ -23,6 +24,7 @@ function calcFontSize(availableWidth: number, fontScalePercent: number) {
 }
 
 function FlashCardShow(props: Props) {
+  const [loaded, setLoaded] = useState(false);
   const [availableWidth, setAvailableWidth] = useState(0);
   const [questionTimeout, setQuestionTimeout] = useState<NodeJS.Timeout | null>(
     null
@@ -73,6 +75,8 @@ function FlashCardShow(props: Props) {
       );
 
       setQuestionFontSize(fontSize);
+
+      setLoaded(true);
     }, 200);
 
     setQuestionTimeout(timeout);
@@ -103,6 +107,14 @@ function FlashCardShow(props: Props) {
     fontSize: number;
   }) => {
     const needOverlay: boolean = !!text && !!imgUrl;
+
+    if (!loaded) {
+      return (
+        <CardContainer>
+          <CircularProgress />
+        </CardContainer>
+      );
+    }
 
     return (
       <CardContainer onClick={flipCard}>

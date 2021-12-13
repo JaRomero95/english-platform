@@ -120,20 +120,6 @@ class FlashCardCategories extends React.Component<Props, State> {
     });
   };
 
-  sortedCategories(): FlashCardCategory[] {
-    return this.state.flashCardCategories.sort(
-      ({name: nameA}, {name: nameB}) => {
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      }
-    );
-  }
-
   onEdit(flashCardCategory: FlashCardCategory) {
     this.setState({editCategory: {...flashCardCategory}});
   }
@@ -192,7 +178,7 @@ class FlashCardCategories extends React.Component<Props, State> {
           value={editCategory!.name}
         />
 
-        <div>
+        <EditActionsContainer>
           <IconButton onClick={this.onUpdate}>
             <SaveIcon />
           </IconButton>
@@ -200,7 +186,7 @@ class FlashCardCategories extends React.Component<Props, State> {
           <IconButton onClick={this.onCancelEdit}>
             <CancelIcon />
           </IconButton>
-        </div>
+        </EditActionsContainer>
       </form>
     );
   }
@@ -237,7 +223,8 @@ class FlashCardCategories extends React.Component<Props, State> {
   }
 
   render() {
-    const flashCardCategories = this.sortedCategories();
+    const {flashCardCategories} = this.state;
+
     return (
       <div>
         {this.createFormMarkup()}
@@ -280,6 +267,18 @@ const CategoryItem = styled.div`
     display: flex;
     justify-content: space-between;
     line-height: 3em;
+  }
+`;
+
+const EditActionsContainer = styled.div`
+  min-width: 90px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  button {
+    height: 40px;
+    width: 40px;
   }
 `;
 

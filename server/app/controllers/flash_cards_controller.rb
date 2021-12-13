@@ -4,12 +4,18 @@ class FlashCardsController < ApplicationController
   def index
     arel = FlashCard.arel_table
 
-    criteria = FlashCard.filter(filter_params)
-                        .where(user: current_user)
-                        .order(
-                          arel[:last_answer_datetime].asc.nulls_first,
-                          arel[:created_at].desc
-                        )
+    criteria = FlashCard.filter(filter_params).where(user: current_user)
+
+    criteria = if order_field.present?
+                 criteria.order(
+                   arel[order_field].send(order_dir)
+                 )
+               else
+                 criteria.order(
+                   arel[:last_answer_datetime].asc.nulls_first,
+                   arel[:created_at].desc
+                 )
+               end
 
     flash_cards = paginate(criteria)
 
@@ -42,6 +48,14 @@ class FlashCardsController < ApplicationController
   end
 
   private
+
+  def order_field
+    params.fetch(:order_field, nil)
+  end
+
+  def order_dir
+    params.fetch(:order_dir, :asc)
+  end
 
   def filter_params
     params.permit(:visible, :question_text, :answer_text, flash_card_category_ids: [])

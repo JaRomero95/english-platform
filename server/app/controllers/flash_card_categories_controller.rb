@@ -4,7 +4,11 @@ class FlashCardCategoriesController < ApplicationController
 
   # GET /flash_card_categories
   def index
-    flash_card_categories = paginate(FlashCardCategory.where(user: current_user))
+    flash_card_categories = paginate(
+      FlashCardCategory.where(user: current_user).order(
+        FlashCardCategory.arel_table[:name].asc
+      )
+    )
 
     render json: index_response(flash_card_categories)
   end
