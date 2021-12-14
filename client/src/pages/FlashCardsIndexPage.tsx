@@ -89,7 +89,7 @@ function FlashCardsIndexPage() {
         per_page: perPage,
         page,
         order_field: 'updated_at',
-        order_dir: 'asc',
+        order_dir: 'desc',
       };
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;
