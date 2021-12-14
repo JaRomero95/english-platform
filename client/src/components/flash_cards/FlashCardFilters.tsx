@@ -1,7 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import AppPaper from 'components/AppPaper';
 import AppInput from 'components/AppInput';
+import AppSelect from 'components/AppSelect';
 import FlashCardCategory from 'models/FlashCardCategory';
 import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySelect';
 
@@ -9,6 +9,7 @@ export interface Filters {
   categoryIds: number[];
   questionText: string;
   answerText: string;
+  visible: any;
 }
 
 interface Props {
@@ -17,65 +18,66 @@ interface Props {
   onFiltersChange: (filters: Filters) => void;
 }
 
-interface State {}
-
-class FlashCardFilters extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {categoryIds: []};
-  }
-
-  onCategorySelected = (categoryIds: any) => {
-    this.props.onFiltersChange({
-      ...this.props.filters,
+function FlashCardFilters(props: Props) {
+  const onCategorySelected = (categoryIds: any) => {
+    props.onFiltersChange({
+      ...props.filters,
       categoryIds,
     });
   };
 
-  onTextFieldChange = (value: string, name: 'questionText' | 'answerText') => {
-    this.props.onFiltersChange({
-      ...this.props.filters,
+  const onFieldChange = (value: string, name: string) => {
+    props.onFiltersChange({
+      ...props.filters,
       [name]: value,
     });
   };
 
-  render() {
-    const {flashCardCategories, filters} = this.props;
+  const {flashCardCategories, filters} = props;
 
-    return (
-      <div>
-        <AppPaper>
-          <FilterLabel>Categories</FilterLabel>
+  return (
+    <div>
+      <AppPaper>
+        <FilterLabel>Categories</FilterLabel>
 
-          <FlashCardCategorySelect
-            flashCardCategories={flashCardCategories}
-            selected={filters.categoryIds}
-            onSelected={this.onCategorySelected}
-            multiple
+        <FlashCardCategorySelect
+          flashCardCategories={flashCardCategories}
+          selected={filters.categoryIds}
+          onSelected={onCategorySelected}
+          multiple
+        />
+
+        <FieldContainer>
+          <FilterLabel>Question text</FilterLabel>
+          <AppInput
+            value={filters.questionText}
+            onChange={(event) => onFieldChange(event, 'questionText')}
           />
+        </FieldContainer>
 
-          <FieldContainer>
-            <FilterLabel>Question text</FilterLabel>
-            <AppInput
-              value={filters.questionText}
-              onChange={(event) =>
-                this.onTextFieldChange(event, 'questionText')
-              }
-            />
-          </FieldContainer>
+        <FieldContainer>
+          <FilterLabel>Answer text</FilterLabel>
+          <AppInput
+            value={filters.answerText}
+            onChange={(event) => onFieldChange(event, 'answerText')}
+          />
+        </FieldContainer>
 
-          <FieldContainer>
-            <FilterLabel>Answer text</FilterLabel>
-            <AppInput
-              value={filters.answerText}
-              onChange={(event) => this.onTextFieldChange(event, 'answerText')}
-            />
-          </FieldContainer>
-        </AppPaper>
-      </div>
-    );
-  }
+        <FieldContainer>
+          <FilterLabel>Playable cards</FilterLabel>
+          <AppSelect
+            value={filters.visible}
+            onChange={(value) => onFieldChange(value, 'visible')}
+            options={[
+              {label: 'All', value: ''},
+              {label: 'Playable', value: 'true'},
+              {label: 'No playable', value: 'false'},
+            ]}
+          />
+        </FieldContainer>
+      </AppPaper>
+    </div>
+  );
 }
 
 const FieldContainer = styled.div`

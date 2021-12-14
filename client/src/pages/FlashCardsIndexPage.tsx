@@ -26,6 +26,7 @@ const buildFilters = (searchParams: URLSearchParams): Filters => {
 
   return {
     categoryIds,
+    visible: searchParams.get('visible') || '',
     questionText: searchParams.get('questionText') || '',
     answerText: searchParams.get('answerText') || '',
   };
@@ -81,18 +82,20 @@ function FlashCardsIndexPage() {
   const filters = buildFilters(searchParams);
 
   const getFlashCardParams = () => {
-    const {categoryIds, questionText, answerText} = filters;
+    const {categoryIds, questionText, answerText, visible} = filters;
 
-    const params: {[name: string]: string | number | Array<number>} = {
-      per_page: perPage,
-      page,
-      order_field: 'updated_at',
-      order_dir: 'asc',
-    };
+    const params: {[name: string]: string | boolean | number | Array<number>} =
+      {
+        per_page: perPage,
+        page,
+        order_field: 'updated_at',
+        order_dir: 'asc',
+      };
 
     if (categoryIds.length) params.flash_card_category_ids = categoryIds;
     if (questionText) params.question_text = questionText;
     if (answerText) params.answer_text = answerText;
+    if (visible) params.visible = visible === 'true';
 
     return params;
   };
@@ -136,6 +139,7 @@ function FlashCardsIndexPage() {
       categoryIds: [],
       questionText: '',
       answerText: '',
+      visible: '',
     });
   }, []);
 
@@ -150,9 +154,6 @@ function FlashCardsIndexPage() {
   }, [searchParams, page, perPage]);
 
   const hasCards = !!flashCards.length;
-
-  // TODO: Add a "no category" filter
-  // TODO: Custom order for this page
 
   return (
     <div>
