@@ -27,6 +27,11 @@ class FlashCardsController < ApplicationController
       create_params.merge(user: current_user)
     )
 
+    flash_cards = FlashCard.where(user: current_user, visible: true)
+    min_date = flash_cards.minimum(:last_answer_datetime) - 1.minutes
+    max_date = flash_cards.maximum(:last_answer_datetime) + 1.minutes
+    @flash_card.last_answer_datetime = rand(min_date..max_date)
+
     if @flash_card.save
       render json: show_response(@flash_card), status: :created, location: @flash_card
     else
