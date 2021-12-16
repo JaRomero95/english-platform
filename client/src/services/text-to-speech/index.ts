@@ -1,8 +1,10 @@
 const synth = window.speechSynthesis;
 
-const voice = synth.getVoices().find(voice => voice.voiceURI.includes('UK English Female'))
+let voice: SpeechSynthesisVoice;
 
 function textToSpeech(text: string) {
+  voice = voice || synth.getVoices().find(voice => voice.voiceURI.includes('UK English Female'))
+
   if (!voice) {
     console.error('No voice found')
     return
