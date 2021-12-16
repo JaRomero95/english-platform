@@ -2,9 +2,11 @@ import {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
 import FlashCard from 'models/FlashCard';
 import {CircularProgress} from '@mui/material';
+import textToSpeech from 'services/text-to-speech';
 
 interface Props {
   flashCard: FlashCard;
+  sound?: boolean;
   fillAvailableSpace?: boolean;
   flippable?: boolean;
   onFlip?: () => void;
@@ -41,6 +43,7 @@ function FlashCardShow(props: Props) {
     flashCard,
     fillAvailableSpace = true,
     flippable = true,
+    sound = false,
   } = props;
 
   const cardElement = useRef(null);
@@ -64,6 +67,25 @@ function FlashCardShow(props: Props) {
 
     setFlipped(!flipped);
   };
+
+  const runTextToSpeech = () => {
+    const text = flipped ? flashCard.answer_text : flashCard.question_text;
+
+    textToSpeech(text);
+  };
+
+  useEffect(() => {
+    if (sound) runTextToSpeech();
+  }, []);
+
+  useEffect(() => {
+    if (sound) runTextToSpeech();
+  }, [flipped]);
+
+  useEffect(() => {
+    if (sound) runTextToSpeech();
+    else textToSpeech('');
+  }, [sound]);
 
   useEffect(() => {
     clearTimeout(questionTimeout!);

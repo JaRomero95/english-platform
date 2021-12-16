@@ -9,6 +9,8 @@ import {
   ArrowForward as ArrowForwardIcon,
   ExpandMore as ExpandMoreIcon,
   Replay as ReplayIcon,
+  VolumeOff as VolumeOffIcon,
+  VolumeUp as VolumeUpIcon,
 } from '@mui/icons-material';
 import FlashCardsRepository from 'repositories/FlashCardsRepository';
 import FlashCardCategoriesRepository from 'repositories/FlashCardCategoriesRepository';
@@ -17,11 +19,13 @@ import FlashCardCategorySelect from 'components/flash_cards/FlashCardCategorySel
 import FlashCardEdit from 'components/flash_cards/FlashCardEdit';
 import AppButton from 'components/AppButton';
 import FlashCardCategory from 'models/FlashCardCategory';
+import MuteStoreContext from 'providers/MuteStoreContext';
+import {observer} from 'mobx-react-lite';
 
 const repository = new FlashCardsRepository();
 const categoriesRepository = new FlashCardCategoriesRepository();
 
-function FlashCardsPage() {
+const FlashCardsPage = observer(() => {
   const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
   const [loadingCards, setLoadingCards] = useState(false);
   const [viewedCardIds, setViewedCardIds] = useState<number[]>([]);
@@ -33,6 +37,9 @@ function FlashCardsPage() {
   const [counted, setCounted] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+
+  const muteStore = React.useContext(MuteStoreContext)!;
+  const mute = muteStore.mute;
 
   const getCurrentFlashCard = (): FlashCard | null => {
     return flashCards[currentFlashCardIndex];
@@ -203,13 +210,21 @@ function FlashCardsPage() {
               key={flashCard.id}
               flashCard={flashCard}
               onFlip={onFlip}
+              sound={!mute}
             />
 
-            <EditButtonContainer>
+            <ButtonsContainer>
               <EditButton variant="text" onClick={() => setShowEditModal(true)}>
                 Edit
               </EditButton>
-            </EditButtonContainer>
+
+              <MuteButton
+                variant="text"
+                onClick={() => muteStore.setMute(!mute)}
+              >
+                {mute ? <VolumeOffIcon /> : <VolumeUpIcon />}
+              </MuteButton>
+            </ButtonsContainer>
 
             <FlashCardEdit
               open={showEditModal}
@@ -245,7 +260,7 @@ function FlashCardsPage() {
       ))}
     </Container>
   );
-}
+});
 
 const Container = styled.div`
   display: flex;
@@ -283,16 +298,21 @@ const ResetButton = styled(AppButton)`
   margin-top: 1rem !important;
 `;
 
-const EditButtonContainer = styled.div`
+const ButtonsContainer = styled.div`
   padding-top: 1rem;
   padding-left: 8%;
   padding-right: 8%;
   display: flex;
   flex-direction: row-reverse;
+  justify-content: space-between;
 `;
 
 const EditButton = styled(AppButton)`
   width: 100px;
+`;
+
+const MuteButton = styled(AppButton)`
+  width: 50px;
 `;
 
 export default FlashCardsPage;
