@@ -1,23 +1,27 @@
 import styled from 'styled-components';
-import {Checkbox} from '@mui/material';
+import {Checkbox, FormGroup, FormControlLabel} from '@mui/material';
 
 interface Props {
   value: boolean;
+  label?: string;
   className?: string;
   onChange: (value: boolean) => void;
 }
 
 function AppCheckbox(props: Props) {
-  const {value, className} = props;
+  const {value, className, label = ''} = props;
 
   const onChange = (event: React.SyntheticEvent, checked: boolean) => {
     return props.onChange(checked);
   };
 
   return (
-    <Container className={className}>
-      <Checkbox checked={value} onChange={onChange} />
-    </Container>
+    <FormGroup className={className}>
+      <FormControlLabel
+        control={<Checkbox checked={value} onChange={onChange} />}
+        label={label}
+      />
+    </FormGroup>
   );
 }
 

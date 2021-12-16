@@ -48,7 +48,7 @@ function FlashCardCreate(props: Props) {
   } as any;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit}>
       <SectionTitle>Select a category</SectionTitle>
 
       <FlashCardCategorySelect
@@ -67,9 +67,9 @@ function FlashCardCreate(props: Props) {
       <Row>
         <AppCheckbox
           value={flashCard.visible}
+          label={flashCard.visible ? 'Playable Card' : 'No playable card'}
           onChange={(visible) => onFieldChange('visible', visible)}
         />
-        {flashCard.visible ? 'Playable Card' : 'No playable card'}
       </Row>
 
       <Divider />
@@ -146,12 +146,28 @@ function FlashCardCreate(props: Props) {
         </div>
       </FlashCardContainer>
 
-      <AppButton type="submit" startIcon={<SaveIcon />} onClick={handleSubmit}>
+      <SubmitButton
+        type="submit"
+        startIcon={<SaveIcon />}
+        onClick={handleSubmit}
+      >
         Save
-      </AppButton>
-    </form>
+      </SubmitButton>
+    </StyledForm>
   );
 }
+
+const StyledForm = styled.form`
+  position: relative;
+`;
+
+const SubmitButton = styled(AppButton)`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  border-radius: 0;
+`;
 
 const StyledInput = styled(AppInput)`
   margin-bottom: 1rem !important;
