@@ -3,7 +3,14 @@ const synth = window.speechSynthesis;
 let voice: SpeechSynthesisVoice;
 
 function textToSpeech(text: string) {
-  voice = voice || synth.getVoices().find(voice => voice.voiceURI.includes('UK English Female'))
+  // FIXME: improve the way to obtain the voice
+  voice = voice
+    || synth.getVoices().find(voice => voice.voiceURI.includes('English United Kingdom'))
+    || synth.getVoices().find(voice => voice.voiceURI.includes('UK English Female'))
+    || synth.getVoices().find(voice => voice.lang === 'en_GB')
+    || synth.getVoices().find(voice => voice.lang === 'en-GB')
+    || synth.getVoices().find(voice => voice.lang.includes('en-'))
+    || synth.getVoices().find(voice => voice.lang.includes('en_'))
 
   if (!voice) {
     console.error('No voice found')
